@@ -1,0 +1,13 @@
+
+struct instruction;
+union vregister;
+
+#include <structs/vregister.h>
+
+#include "struct.h"
+
+#include <enums/error.h>
+
+#include <memory/tmalloc.h>
+#include <memory/tinc.h>
+#include <memory/tfree.h>
