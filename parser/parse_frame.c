@@ -6,6 +6,9 @@
 #include <instruction/struct.h>
 #include <instruction/frame/new.h>
 
+#include <misc/vregister_ll/new.h>
+#include <misc/vregister_ll/append.h>
+
 #include "tokenizer.h"
 #include "read_token.h"
 
@@ -19,6 +22,7 @@ int parse_frame(
 	int error = 0;
 	char* funcname = NULL;
 	unsigned frame_size;
+	struct vregister_ll* args = NULL;
 	struct instruction* frame = NULL, *next;
 	ENTER;
 	
@@ -35,17 +39,23 @@ int parse_frame(
 		?: read_token(t)
 		?: (t->token != t_integer_literal || t->data.intlit.value < 0 ? e_syntax_error : 0)
 		?: (frame_size = t->data.intlit.value, read_token(t))
+		?: new_vregister_ll(&args);
 		 ;
 	
 	while (!error && t->token == t_comma)
 	{
-		// virtual register parameters
-		TODO;
+		unsigned vr;
+		
+		error = 0
+			?: read_token(t)
+			?: (t->token != t_vregister ? e_syntax_error : 0)
+			?: (vr = t->data.vregister.index, read_token(t))
+			?: vregister_ll_append(args, vr);
 	}
 	
 	if (!error)
 		error = 0
-			?: new_frame_instruction(&frame, line, funcname, frame_size)
+			?: new_frame_instruction(&frame, line, funcname, frame_size, args)
 			?: scope_declare_block(s, funcname, frame)
 			?: (next = frame, parse_instructions(t, s, &next))
 			 ;

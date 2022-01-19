@@ -29,6 +29,7 @@
 	
 	#include <enums/error.h>
 	
+	#include <memory/tcalloc.h>
 	#include <memory/tmalloc.h>
 	#include <memory/trealloc.h>
 	#include <memory/tinc.h>
@@ -43,6 +44,7 @@
 	struct tokenizer;
 	struct instruction;
 	struct instruction_inheritance;
+	struct vregister_ll;
 	
 	union vregister;
 	

@@ -4,7 +4,7 @@
 #ifdef DEBUGGING
 int debug_depth = 0;
 
-static void escape(char str[5], char ch)
+static void escape(char str[5], unsigned char ch)
 {
 	switch (ch)
 	{
@@ -42,8 +42,7 @@ static void escape(char str[5], char ch)
 		case '\'': strcpy(str, "\\\'"); break;
 		
 		default:
-			dpv((int) ch);
-			TODO;
+			sprintf(str, "\\%#o", ch);
 			break;
 	}
 }

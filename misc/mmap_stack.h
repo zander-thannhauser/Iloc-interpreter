@@ -1,2 +1,2 @@
 
-int mmap_stack(void** out, union vregister* registers);
+int mmap_stack(void** out);

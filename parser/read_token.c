@@ -141,21 +141,15 @@ int read_token(struct tokenizer* this)
 	}
 	
 	dpv(this->line);
-	dpv(this->column);
 	
 	char c = getc(this->in);
 	dpvc(c);
 	
-	unsigned token_line, token_column;
+	unsigned token_line;
 	goto start;
 	while (!error && state >= s_start)
 	{
-		switch (c)
-		{
-			case '\t': this->column += this->column & 7; break;
-			case '\n': this->line++, this->column = 0; break;
-			default: this->column++; break;
-		}
+		this->line += c == '\n';
 		
 		error = append(c);
 		
@@ -166,7 +160,6 @@ int read_token(struct tokenizer* this)
 			start:
 			this->text.n = 0;
 			token_line = this->line;
-			token_column = this->column;
 		}
 		
 		state = lookup[state][MAX(c, 0)];
@@ -175,19 +168,17 @@ int read_token(struct tokenizer* this)
 	ungetc(c, this->in);
 	
 	this->token_line = token_line;
-	this->token_column = token_column;
 	
 	dpv(state);
 	dpvsn(this->text.data, this->text.n);
 	dpv(token_line);
-	dpv(token_column);
 	
 	switch (state)
 	{
 		case s_error:
 		{
-			fprintf(stderr, "%s: @[%u:%u] unknown token '%.*s%c'!\n", argv0,
-				token_line, token_column,
+			fprintf(stderr, "%s: line %u: unknown token '%.*s%c'!\n", argv0,
+				token_line,
 				(int) this->text.n, this->text.data, c);
 			error = e_lexical_error;
 			break;
@@ -228,6 +219,8 @@ int read_token(struct tokenizer* this)
 			// psudo-ops:
 			O (data);
 			else O (string);
+			else O (float);
+			else O (global);
 			else O (text);
 			else O (frame);
 			// Integer Arthmetic Instructions:
@@ -303,6 +296,7 @@ int read_token(struct tokenizer* this)
 			else T(cbr_NE);
 			// Undocumented Instructions:
 			else T(nop);
+			else T(call);
 			else
 			{
 				append('\0');
@@ -341,10 +335,11 @@ int read_token(struct tokenizer* this)
 			break;
 		}
 		
+		char* m;
+		
 		// literals:
 		case s_integer:
 		{
-			char* m;
 			ddprintf("s_integer" "\n");
 			
 			append('\0');
@@ -369,7 +364,24 @@ int read_token(struct tokenizer* this)
 		
 		case s_float:
 		{
-			TODO;
+			ddprintf("s_float" "\n");
+			append('\0');
+			
+			errno = 0;
+			float value = strtof(this->text.data, &m);
+			
+			if (errno || *m)
+			{
+				TODO;
+				error = 1;
+			}
+			else
+			{
+				dpv(value);
+				
+				this->data.floatlit.value = value;
+				this->token = t_float_literal;
+			}
 			break;
 		}
 		
@@ -396,6 +408,8 @@ int read_token(struct tokenizer* this)
 						TODO;
 						break;
 				}
+			
+			*w = '\0';
 			
 			this->data.string.chars = this->text.data;
 			this->data.string.len = w - s;

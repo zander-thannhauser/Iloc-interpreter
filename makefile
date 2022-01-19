@@ -99,10 +99,10 @@ buildprefix = gen/$(buildtype)-build/$(link)-link/$(libc)-libc
 default: $(buildprefix)/interpreter
 
 #ARGS += -v
-#ARGS += -d
+ARGS += -d
 
-#ARGS += -i ./examples/arrayparam.il
-ARGS += -i ./examples/bubble.il
+ARGS += -i ./examples/arrayparam.il
+#ARGS += -i ./examples/bubble.il
 #ARGS += -i ./examples/check.dbre.il
 #ARGS += -i ./examples/check.il
 #ARGS += -i ./examples/dynamic.il

@@ -5,7 +5,7 @@
 
 #include "mmap_stack.h"
 
-int mmap_stack(void** out, union vregister* registers)
+int mmap_stack(void** out)
 {
 	int error = 0;
 	void* stack;
@@ -29,19 +29,6 @@ int mmap_stack(void** out, union vregister* registers)
 	else
 	{
 		dpv(stack);
-		
-		// set %rsp:
-		{
-			registers[1].as_int = (int64_t) stack;
-		}
-		
-		// the caller needs to push %rip:
-		{
-			int32_t* rsp = (int32_t*) (int64_t) registers[1].as_int;
-			*rsp = 0;
-			registers[1].as_int -= 4;
-		}
-		
 		*out = stack;
 	}
 	

@@ -25,7 +25,7 @@ void ret_instruction_execute(
 	
 	/* jump (pop %rsp):*/
 	{
-		rs[1].as_int += 4;
+		rs[1].as_int += 8;
 		
 		void** rsp = (void**) (int64_t) rs[1].as_int;
 		

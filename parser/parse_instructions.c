@@ -8,6 +8,7 @@
 #include <memory/tfree.h>
 
 #include <scope/lookup_block.h>
+#include <scope/lookup_global.h>
 
 #include <instruction/struct.h>
 
@@ -29,9 +30,15 @@
 #include <instruction/testle/new.h>
 
 // Floating-point Instructions:
+#include <instruction/f2i/new.h>
+#include <instruction/i2f/new.h>
+#include <instruction/fadd/new.h>
+#include <instruction/fmult/new.h>
+#include <instruction/fload/new.h>
 
 // I/O Instructions:
 #include <instruction/iwrite/new.h>
+#include <instruction/swrite/new.h>
 
 // Branch Instructions
 #include <instruction/ret/new.h>
@@ -40,6 +47,10 @@
 
 // Undocumented Instructions:
 #include <instruction/nop/new.h>
+#include <instruction/call/new.h>
+
+#include <misc/vregister_ll/new.h>
+#include <misc/vregister_ll/append.h>
 
 #include "tokenizer.h"
 #include "read_token.h"
@@ -52,7 +63,7 @@ int parse_instructions(
 {
 	int error = 0;
 	bool keep_going = true;
-	signed int intlit;
+	int32_t intlit;
 	unsigned vr1, vr2, vr3;
 	ENTER;
 	
@@ -66,12 +77,16 @@ int parse_instructions(
 	#define II       ?: (intlit = t->data.intlit.value, 0)
 	#define RR(i)    ?: (vr##i = t->data.intlit.value, 0)
 	#define LL       ?: scope_lookup_block(s, t->data.label.text, &label)
+	#define GG       ?: scope_lookup_global(s, t->data.label.text, &intlit)
 	
 	#define I        E(t_integer_literal) II T
 	#define R(i)     E(t_vregister) RR(i) T
 	#define A        E(t_arrow) T
 	#define C        E(t_comma) T
 	#define L        E(t_label) LL T
+	#define G        E(t_label) GG T
+	
+	#define IorG     ?: (t->token == t_integer_literal ? (0 II) : (0 GG)) T
 	
 	#define N(name, ...) ?: new_##name##_instruction(&current, line __VA_OPT__(,) __VA_ARGS__)
 	
@@ -104,7 +119,7 @@ int parse_instructions(
 			case t_rshiftI: TODO; break;
 			
 			// Integer Memory Operations
-			case t_loadI:   S I    A R(1) N(loadI, intlit, vr1); break;
+			case t_loadI:   S IorG A R(1) N(loadI, intlit, vr1); break;
 			case t_load:    S R(1) A R(3) N(load,  vr1, vr3); break;
 			case t_loadAI:  TODO; break;
 			case t_loadAO:  TODO; break;
@@ -128,15 +143,15 @@ int parse_instructions(
 			case t_testle: S R(1)        A R(3) N(testle, vr1,      vr3); break;
 			
 			// Floating-point Operations
-			case t_f2i:      TODO; break;
-			case t_i2f:      TODO; break;
+			case t_f2i:      S R(1) A R(3) N(f2i, vr1, vr3); break;
+			case t_i2f:      S R(1) A R(3) N(i2f, vr1, vr3); break;
 			case t_f2f:      TODO; break;
-			case t_fadd:     TODO; break;
+			case t_fadd:     S R(1) C R(2) A R(3) N(fadd, vr1, vr2, vr3); break;
 			case t_fsub:     TODO; break;
-			case t_fmult:    TODO; break;
+			case t_fmult:    S R(1) C R(2) A R(3) N(fmult, vr1, vr2, vr3); break;
 			case t_fdiv:     TODO; break;
 			case t_fcomp:    TODO; break;
-			case t_fload:    TODO; break;
+			case t_fload:    S R(1) A R(3) N(fload,  vr1, vr3); break;
 			case t_floadAI:  TODO; break;
 			case t_floadAO:  TODO; break;
 			case t_fstore:   TODO; break;
@@ -148,7 +163,7 @@ int parse_instructions(
 			case t_iread:  TODO; break;
 			case t_fwrite: TODO; break;
 			case t_iwrite: S R(1) N(iwrite, vr1); break;
-			case t_swrite: TODO; break;
+			case t_swrite: S R(1) N(swrite, vr1); break;
 			
 			// Branch Instructions:
 			case t_jumpI:  TODO; break;
@@ -165,6 +180,22 @@ int parse_instructions(
 			
 			// Undocumented Instructions:
 			case t_nop:    S N(nop); break;
+			
+			case t_call:
+			{
+				struct vregister_ll* regs = NULL;
+				
+				S L ?: new_vregister_ll(&regs);
+				
+				while (!error && t->token == t_comma)
+					S R(1) ?: vregister_ll_append(regs, vr1);
+				
+				if (!error)
+					error = new_call_instruction(&current, line, label, regs);
+				
+				tfree(regs);
+				break;
+			}
 			
 			default:
 				keep_going = false;

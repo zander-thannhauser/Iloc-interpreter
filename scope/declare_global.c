@@ -12,7 +12,6 @@
 int scope_declare_global(
 	struct scope* this,
 	char* label,
-	size_t size,
 	void* data)
 {
 	int error = 0;
@@ -20,10 +19,12 @@ int scope_declare_global(
 	ENTER;
 	
 	dpvs(label);
-	dpv(size);
-	dpvsn(data, size);
+	dpv(data);
+	dpv(this->globals);
 	
-	error = new_global(&global, label, size, data);
+	error = new_global(&global, label, data);
+	
+	dpv(global);
 	
 	if (error);
 	else if (avl_insert(this->globals, global))

@@ -11,6 +11,7 @@
 
 int parse_data(
 	struct tokenizer* t,
+	void* globals,
 	struct scope* scope)
 {
 	int error = 0;
@@ -25,36 +26,177 @@ int parse_data(
 		while (!error && keep_going)
 		{
 			char* label = NULL;
-			size_t size;
-			char* value = NULL;
 			
 			if (t->token == t_string)
 			{
-				error = 0
-					?: read_token(t)
-					?: (t->token != t_label ? e_syntax_error : 0)
-					?: tstrdup(&label, t->data.label.text)
-					?: read_token(t)
-					?: (t->token != t_comma ? e_syntax_error : 0)
-					?: read_token(t)
-					?: (t->token != t_string_literal ? e_syntax_error : 0)
-					?: tstrndup(&value, t->data.string.chars, size = t->data.string.len)
-					?: scope_declare_global(scope, label, size, value)
-					?: read_token(t)
-					 ;
+				error = read_token(t);
+				
+				if (!error && t->token != t_label)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = tstrdup(&label, t->data.label.text);
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_comma)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_string_literal)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+				{
+					size_t n = t->data.string.len + 1;
+					
+					globals -= n;
+					
+					memcpy(globals, t->data.string.chars, n);
+					
+					dpvs(globals);
+					
+					assert(scope);
+					
+					error = scope_declare_global(scope, label, globals);
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
 			}
 			else if (t->token == t_float)
 			{
-				TODO;
+				error = read_token(t);
+				
+				if (!error && t->token != t_label)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = tstrdup(&label, t->data.label.text);
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_comma)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_float_literal)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+				{
+					globals -= sizeof(float);
+					
+					memcpy(globals, &t->data.floatlit.value, sizeof(float));
+					
+					dpvs(globals);
+					
+					assert(scope);
+					
+					error = scope_declare_global(scope, label, globals);
+				}
+				
+				if (!error)
+					error = read_token(t);
 			}
 			else if (t->token == t_global)
 			{
-				TODO;
+				size_t size, align;
+				
+				error = read_token(t);
+				
+				if (!error && t->token != t_label)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = tstrdup(&label, t->data.label.text);
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_comma)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_integer_literal)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+				{
+					size = t->data.intlit.value;
+					error = read_token(t);
+				}
+				
+				if (!error && t->token != t_comma)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
+				if (!error && t->token != t_integer_literal)
+				{
+					TODO;
+					error = 1;
+				}
+				
+				if (!error)
+				{
+					align = t->data.intlit.value;
+					dpv(size);
+					dpv(align);
+					
+					globals -= size;
+					globals -= align - (intptr_t) globals % align;
+					error = scope_declare_global(scope, label, globals);
+				}
+				
+				if (!error)
+					error = read_token(t);
+				
 			}
 			else
 				keep_going = false;
 			
-			tfree(label), tfree(value);
+			tfree(label);
 		}
 	}
 	

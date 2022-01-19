@@ -18,6 +18,7 @@
 #include <instruction/execute.h>
 
 #include <misc/mmap_stack.h>
+#include <misc/init_stack.h>
 
 #include "print_stats.h"
 
@@ -26,21 +27,24 @@ int main(int argc, char** argv)
 	int error = 0;
 	struct cmdln_flags* flags = NULL;
 	struct scope* scope = NULL;
+	void* globals;
 	size_t nregisters;
 	union vregister* registers = NULL;
 	struct instruction* i;
 	struct stats stats = {};
-	void* stack = NULL;
+	void* stack;
 	ENTER;
 	
 	error = 0
 		?: process_cmdln(&flags, argc, argv)
 		?: new_scope(&scope)
-		?: parse(flags->in, scope, &nregisters)
+		?: mmap_stack(&globals)
+		?: parse(flags->in, scope, globals, &nregisters)
 		?: scope_lookup_block(scope, "main", &i)
 		?: scope_check_unresolved(scope)
 		?: tcalloc((void**) &registers, nregisters, sizeof(*registers))
-		?: mmap_stack(&stack, registers)
+		?: mmap_stack(&stack)
+		?: init_stack(stack, registers);
 		 ;
 	
 	if (!error) do

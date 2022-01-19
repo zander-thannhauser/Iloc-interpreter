@@ -5,8 +5,8 @@ struct tokenizer
 {
 	FILE* in;
 	
-	unsigned line, column;
-	unsigned token_line, token_column;
+	unsigned line;
+	unsigned token_line;
 	
 	struct {
 		char* data;
@@ -117,6 +117,7 @@ struct tokenizer
 		
 		// Undocumented Instructions
 		t_nop,
+		t_call,
 	} token;
 	
 	union {

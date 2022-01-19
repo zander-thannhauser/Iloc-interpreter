@@ -8,10 +8,13 @@
 int new_global(
 	struct global** new,
 	char* name,
-	size_t size, void* value)
+	void* value)
 {
 	int error = 0;
 	ENTER;
+	
+	dpv(name);
+	dpv(value);
 	
 	struct global* this = NULL;
 	
@@ -20,8 +23,7 @@ int new_global(
 	if (!error)
 	{
 		this->name = tinc(name);
-		this->size = size;
-		this->value = tinc(value);
+		this->value = value;
 		
 		*new = this;
 	}

@@ -31,7 +31,7 @@ int scope_lookup_block(
 	{
 		struct unresolved* b = node->item;
 		dpvs(b->name);
-		TODO;
+		*out = tinc(b->instruction);
 	}
 	else
 	{

@@ -10,7 +10,6 @@ void free_global(void* a)
 	ENTER;
 	
 	tfree(g->name);
-	tfree(g->value);
 	
 	EXIT;
 }

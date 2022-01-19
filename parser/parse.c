@@ -10,16 +10,17 @@
 int parse(
 	FILE* in,
 	struct scope* scope,
+	void* globals,
 	size_t* out_nregisters)
 {
 	int error = 0;
 	ENTER;
 	
-	struct tokenizer t = { .in = in, .line = 1, .column = 0, .max_vreg = 4};
+	struct tokenizer t = { .in = in, .line = 1, .max_vreg = 4};
 	
 	error = 0
 		?: read_token(&t)
-		?: parse_data(&t, scope)
+		?: parse_data(&t, globals, scope)
 		?: parse_text(&t, scope, out_nregisters);
 	
 	dpv(t.max_vreg);
@@ -27,6 +28,11 @@ int parse(
 	
 	if (!error && t.token != t_EOF)
 		error = e_syntax_error;
+	
+	if (error == e_syntax_error)
+	{
+		fprintf(stderr, "%s: syntax error on line %u\n", argv0, t.token_line);
+	}
 	
 	tfree(t.text.data);
 	
