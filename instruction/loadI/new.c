@@ -1,6 +1,4 @@
 
-#include <debug.h>
-
 #include "../new.h"
 
 #include "struct.h"
@@ -10,7 +8,7 @@
 int new_loadI_instruction(
 	struct instruction** new,
 	unsigned line,
-	int32_t intlit,
+	int intlit,
 	unsigned vr)
 {
 	int error = 0;

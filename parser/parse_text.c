@@ -1,6 +1,4 @@
 
-#include <debug.h>
-
 #include <macros/streq.h>
 
 #include "tokenizer.h"
@@ -12,7 +10,8 @@
 int parse_text(
 	struct tokenizer* t,
 	struct scope* s,
-	size_t* out_nregisters)
+	size_t* out_nregisters,
+	size_t* out_nparameters)
 {
 	int error = 0;
 	ENTER;
@@ -23,7 +22,7 @@ int parse_text(
 		
 		while (!error && t->token == t_frame)
 		{
-			error = parse_frame(t, s);
+			error = parse_frame(t, s, out_nparameters);
 		}
 	}
 	

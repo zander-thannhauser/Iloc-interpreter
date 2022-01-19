@@ -1,6 +1,4 @@
 
-#include <debug.h>
-
 #ifdef DEBUGGING
 int debug_depth = 0;
 

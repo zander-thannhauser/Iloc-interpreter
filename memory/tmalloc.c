@@ -18,7 +18,7 @@ int tmalloc(void** retval, size_t size, void (*destructor)(void*))
 	header = malloc(sizeof(*header) + size);
 	
 	if (!header)
-		fprintf(stderr, "%s: malloc(size = %lu): %m\n", argv0, size),
+		fprintf(stderr, "%s: malloc(size = %u): %m\n", argv0, size),
 		error = e_out_of_memory;
 	else
 	{

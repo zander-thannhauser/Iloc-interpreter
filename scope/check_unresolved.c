@@ -1,7 +1,11 @@
 
+#include <stdio.h>
+
 #include <avl/avl.h>
 
-#include <debug.h>
+#include <defines/argv0.h>
+
+#include <enums/error.h>
 
 #include "unresolved/struct.h"
 

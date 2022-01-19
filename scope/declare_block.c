@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include <memory/tinc.h>
 #include <memory/tfree.h>
 
 #include <avl/avl.h>
@@ -29,7 +30,7 @@ int scope_declare_block(
 	if (!error && (node = avl_search(this->unresolved, &label)))
 	{
 		struct unresolved* u = node->item;
-		u->instruction->next = instruction; // intentionally not tinc-d
+		u->instruction->next = tinc(instruction);
 		avl_delete_node(this->unresolved, node);
 	}
 		

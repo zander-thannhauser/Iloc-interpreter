@@ -1,7 +1,12 @@
 
-#include <debug.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 #include <macros/streq.h>
+
+#include <memory/tstrdup.h>
+#include <memory/tfree.h>
 
 #include <scope/declare_global.h>
 
@@ -110,13 +115,14 @@ int parse_data(
 				
 				if (!error)
 				{
+					dpv(t->data.floatlit.value);
+					
 					globals -= sizeof(float);
 					
 					memcpy(globals, &t->data.floatlit.value, sizeof(float));
 					
-					dpvs(globals);
-					
-					assert(scope);
+					dpv(globals);
+					dpv(*((float*) globals));
 					
 					error = scope_declare_global(scope, label, globals);
 				}

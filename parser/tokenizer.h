@@ -130,14 +130,14 @@ struct tokenizer
 		} vregister;
 		
 		struct {
-			double value;
+			float value;
 		} floatlit;
 		struct {
 			char* chars;
 			size_t len;
 		} string;
 		struct {
-			int32_t value;
+			int value;
 		} intlit;
 	} data;
 	

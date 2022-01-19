@@ -1,5 +1,5 @@
 
-#include <debug.h>
+#include <memory/tinc.h>
 
 #include "../new.h"
 

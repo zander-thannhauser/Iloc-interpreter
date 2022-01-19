@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include <enums/error.h>
-#include <debug.h>
 
 #include <defines/argv0.h>
 
@@ -30,7 +29,7 @@ int trealloc(void** retval, size_t size)
 		
 		if (!(newh = realloc(oldh, sizeof(*oldh) + size)))
 		{
-			fprintf(stderr, "%s: realloc(%lu): %m\n", argv0, size),
+			fprintf(stderr, "%s: realloc(size = %u): %m\n", argv0, size),
 			error = e_out_of_memory;
 		}
 		else
@@ -41,6 +40,7 @@ int trealloc(void** retval, size_t size)
 			*retval = (void*) newh + sizeof(*newh);
 		}
 	}
+	
 	return error;
 }
 

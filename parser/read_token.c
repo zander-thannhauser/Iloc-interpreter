@@ -1,7 +1,15 @@
 
 #include <sys/param.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdint.h>
 
-#include <debug.h>
+#include <defines/argv0.h>
+
+#include <enums/error.h>
+
+#include <memory/trealloc.h>
 
 #include "tokenizer.h"
 #include "read_token.h"

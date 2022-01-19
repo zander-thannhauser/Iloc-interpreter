@@ -1,11 +1,14 @@
 
-#include <debug.h>
+#include <stdio.h>
 
 #include <macros/LAMBDA.h>
 
 #include <structs/vregister.h>
+#include <structs/stats.h>
 
 #include <misc/vregister_ll/foreach.h>
+
+#include <instruction/frame/struct.h>
 
 #include "struct.h"
 #include "execute.h"
@@ -15,6 +18,7 @@ void call_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* rs,
+	union vregister* ps,
 	struct instruction** next)
 {
 	size_t i = 0, n = 0;
@@ -22,8 +26,7 @@ void call_instruction_execute(
 	
 	if (debug)
 	{
-		printf("line %4i: %8s, %p", super->line, "call",
-			this->callme);
+		printf("line %4i: %8s %10p", super->line, "call", this->callme);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
 			printf(", %%vr%u", u);
@@ -39,24 +42,14 @@ void call_instruction_execute(
 		printf(")\n");
 	}
 	
-	union vregister tmp[n];
-	
 	vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-		tmp[i++] = rs[u];
+		ps[i++] = rs[u];
 	}));
 	
-	for (i = 0; i < n; i++)
-		rs[i + 4] = tmp[i];
+	/* push %rip:    */ *rs[1].as_pptr-- = super->next;
+	/* jump to call: */ *next            = this->callme;
 	
-	// push %rip:
-	{
-		void** rsp = (void**) (int64_t) rs[1].as_int;
-		*rsp = super->next;
-		rs[1].as_int -= 8;
-	}
-	
-	// jump:
-	*next = this->callme;
+	stats->total++;
 }
 
 

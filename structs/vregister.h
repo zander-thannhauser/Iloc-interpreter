@@ -1,9 +1,12 @@
 
 union vregister
 {
-	// all of size of 4:
-	int32_t as_int;
-	float   as_float;
-	// void* as_ptr;
+	int    as_int;
+	float  as_float;
+	
+	void*  as_ptr;
+	void** as_pptr;
+	int*   as_iptr;
+	float* as_fptr;
 };
 

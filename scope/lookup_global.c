@@ -1,4 +1,6 @@
 
+#include <assert.h>
+
 #include <avl/avl.h>
 
 #include "global/struct.h"
@@ -9,7 +11,7 @@
 int scope_lookup_global(
 	struct scope* this,
 	char* label,
-	int32_t* out)
+	void** out)
 {
 	int error = 0;
 	struct avl_node_t* node;
@@ -21,7 +23,7 @@ int scope_lookup_global(
 		
 		dpv(g->value);
 		
-		*out = (int32_t) (int64_t) g->value;
+		*out = g->value;
 	}
 	else
 	{

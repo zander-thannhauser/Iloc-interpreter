@@ -1,6 +1,10 @@
 
 #include <stddef.h>
 
+struct instruction_inheritance;
+
+struct instruction;
+
 int new_instruction(
 	struct instruction** new,
 	unsigned line,

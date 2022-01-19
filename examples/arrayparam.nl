@@ -17,9 +17,9 @@ VAR i,j:INTEGER;
 BEGIN
 	i:=1; j:=10;
 	WHILE i<=10 DO BEGIN
-	  a[i]:= (i*0.01)+j;
-	  i:=i+1;
-	  j:=j+1
+		a[i]:= (i*0.01)+j;
+		i:=i+1;
+		j:=j+1
 	END
 END;
 
@@ -49,12 +49,20 @@ BEGIN
 	writearray(x);
 	i:=1;
 	WHILE i<=10 DO BEGIN
-	  x[i]:= x[i]*i;
-	  inc(x[i]); 
-	  i:=i+1
+		x[i]:= x[i]*i;
+		inc(x[i]);
+		i:=i+1
 	END;
 	writearray(x)
-
-
-
 END
+
+
+
+
+
+
+
+
+
+
+

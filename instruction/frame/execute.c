@@ -1,5 +1,5 @@
 
-#include <debug.h>
+#include <stdio.h>
 
 #include <macros/LAMBDA.h>
 
@@ -15,6 +15,7 @@ void frame_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* rs,
+	union vregister* ps,
 	struct instruction** next)
 {
 	size_t i = 0, n = 0;
@@ -22,7 +23,7 @@ void frame_instruction_execute(
 	
 	if (debug)
 	{
-		printf("line %4u: %8s %s, %zu", super->line,
+		printf("line %4u: %8s %10s, %10zu", super->line,
 			".frame", this->name, this->frame_size);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
@@ -31,39 +32,21 @@ void frame_instruction_execute(
 		}));
 	}
 	
-	/* pushq %rbp:*/
-	{
-		int64_t* rsp = (int64_t*)(int64_t) rs[1].as_int;
-		*rsp = rs[0].as_int;
-		rs[1].as_int++;
-	}
-	
-	/* movq %rsp, %rbp: */
-	{
-		rs[0].as_int = rs[1].as_int;
-	}
-	
-	/* subq fs, %rsp: */
-	{
-		rs[1].as_int -= this->frame_size;
-	}
+	/* pushq %rbp:      */ *rs[1].as_pptr-- = rs[0].as_ptr;
+	/* movq %rsp, %rbp: */  rs[0].as_ptr    = rs[1].as_ptr;
+	/* subq fs, %rsp:   */  rs[1].as_int   -= this->frame_size;
 	
 	// copy parameters over:
 	{
-		union vregister tmp[n];
-		
-		for (i = 0; i < n; i++)
-			tmp[i] = rs[i + 4];
-		
 		i = 0, vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			rs[u] = tmp[i++];
+			rs[u] = ps[i++];
 		}));
 	}
 	
 	if (debug)
 	{
-		printf(" // (%%vr0 = 0x%X, %%vr1 = 0x%X",
-			rs[0].as_int, rs[1].as_int);
+		printf(" // (%%vr0 = %p, %%vr1 = %p",
+			rs[0].as_ptr, rs[1].as_ptr);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
 			printf(", %%vr%u = %i", u, rs[u].as_int);

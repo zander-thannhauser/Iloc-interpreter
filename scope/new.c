@@ -1,5 +1,14 @@
 
-#include <debug.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+#include <defines/argv0.h>
+
+#include <enums/error.h>
+
+#include <memory/tmalloc.h>
+#include <memory/tfree.h>
 
 #include <avl/avl.h>
 

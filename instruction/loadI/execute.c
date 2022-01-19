@@ -1,7 +1,7 @@
 
-#include <debug.h>
-
+#include <stdio.h>
 #include <structs/vregister.h>
+#include <structs/stats.h>
 
 #include "struct.h"
 #include "execute.h"
@@ -11,6 +11,7 @@ void loadI_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* registers,
+	union vregister* parameters,
 	struct instruction** next)
 {
 	char vr[10];
@@ -20,7 +21,7 @@ void loadI_instruction_execute(
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
-		printf("line %4i: %8s %8i  %8s => %-16s",
+		printf("line %4i: %8s %10i  %10s => %-10s",
 			super->line, "loadI", this->intlit, "", vr);
 	}
 	
@@ -30,6 +31,8 @@ void loadI_instruction_execute(
 		printf(" // (%%vr%u = %i)\n", this->vr, registers[this->vr].as_int);
 	
 	*next = super->next;
+	
+	stats->total++;
 }
 
 

@@ -49,6 +49,7 @@
 #include <instruction/nop/new.h>
 #include <instruction/call/new.h>
 
+#include <misc/vregister_ll/struct.h>
 #include <misc/vregister_ll/new.h>
 #include <misc/vregister_ll/append.h>
 
@@ -59,11 +60,12 @@
 int parse_instructions(
 	struct tokenizer* t,
 	struct scope* s,
+	size_t* out_nparameters,
 	struct instruction** next)
 {
 	int error = 0;
 	bool keep_going = true;
-	int32_t intlit;
+	int intlit;
 	unsigned vr1, vr2, vr3;
 	ENTER;
 	
@@ -77,7 +79,7 @@ int parse_instructions(
 	#define II       ?: (intlit = t->data.intlit.value, 0)
 	#define RR(i)    ?: (vr##i = t->data.intlit.value, 0)
 	#define LL       ?: scope_lookup_block(s, t->data.label.text, &label)
-	#define GG       ?: scope_lookup_global(s, t->data.label.text, &intlit)
+	#define GG       ?: scope_lookup_global(s, t->data.label.text, (void**) &intlit)
 	
 	#define I        E(t_integer_literal) II T
 	#define R(i)     E(t_vregister) RR(i) T
@@ -191,7 +193,12 @@ int parse_instructions(
 					S R(1) ?: vregister_ll_append(regs, vr1);
 				
 				if (!error)
+				{
+					if (regs->n > *out_nparameters)
+						*out_nparameters = regs->n;
+					
 					error = new_call_instruction(&current, line, label, regs);
+				}
 				
 				tfree(regs);
 				break;

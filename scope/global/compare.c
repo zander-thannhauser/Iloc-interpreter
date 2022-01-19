@@ -1,5 +1,5 @@
 
-#include <debug.h>
+#include <string.h>
 
 #include "struct.h"
 #include "compare.h"

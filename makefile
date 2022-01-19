@@ -5,7 +5,9 @@ CPPFLAGS += -D _GNU_SOURCE
 CPPFLAGS += -I .
 CPPFLAGS += -isystem ./extern
 
-CFLAGS += -Wall -Werror -Wfatal-errors
+CFLAGS += -m32 -Wall -Werror -Wfatal-errors
+
+LDFLAGS += -m32
 
 FINDFLAGS ?= -name '*.c'
 
@@ -49,7 +51,8 @@ else
 $(error "invalid buildtype!");
 endif
 
-link ?= static
+link ?= dynamic
+#link ?= static
 
 ifeq ($(link), static)
 CPPFLAGS += -D STATIC_LINK
@@ -61,7 +64,8 @@ else
 $(error "invalid link value!");
 endif
 
-libc ?= local
+libc ?= system
+#libc ?= local
 
 ifeq ($(libc), system)
 CPPFLAGS += -D SYSTEM_LIBC
@@ -100,7 +104,9 @@ default: $(buildprefix)/interpreter
 
 #ARGS += -v
 ARGS += -d
+ARGS += -s
 
+#ARGS += -i ./examples/test.il
 ARGS += -i ./examples/arrayparam.il
 #ARGS += -i ./examples/bubble.il
 #ARGS += -i ./examples/check.dbre.il

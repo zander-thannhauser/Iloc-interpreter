@@ -8,4 +8,5 @@ void execute_instruction(
 	bool debug,
 	struct stats* stats,
 	union vregister* registers,
+	union vregister* pregisters,
 	struct instruction** next);

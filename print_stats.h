@@ -1,1 +1,1 @@
-int print_stats(struct stats* this);
+void print_stats(struct stats* this);

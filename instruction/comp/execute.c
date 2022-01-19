@@ -1,7 +1,8 @@
 
-#include <debug.h>
+#include <stdio.h>
 
 #include <structs/vregister.h>
+#include <structs/stats.h>
 
 #include "struct.h"
 #include "execute.h"
@@ -11,6 +12,7 @@ void comp_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* rs,
+	union vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
@@ -24,13 +26,13 @@ void comp_instruction_execute(
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
 		snprintf(vr3, 10, "%%vr%u", this->vr3);
 		
-		printf("line %4i: %8s %8s, %8s => %-16s", super->line,
+		printf("line %4i: %8s %10s, %10s => %-10s", super->line,
 			"comp", vr1, vr2, vr3);
 	}
 	
-	int32_t vr1_value = rs[this->vr1].as_int;
-	int32_t vr2_value = rs[this->vr2].as_int;
-	int32_t vr3_value;
+	int vr1_value = rs[this->vr1].as_int;
+	int vr2_value = rs[this->vr2].as_int;
+	int vr3_value;
 	
 	if (vr1_value > vr2_value)
 		vr3_value = +1;
@@ -50,6 +52,9 @@ void comp_instruction_execute(
 	}
 	
 	*next = super->next;
+	
+	stats->comparisons++;
+	stats->total++;
 }
 
 

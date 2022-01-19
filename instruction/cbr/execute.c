@@ -1,7 +1,8 @@
 
-#include <debug.h>
+#include <stdio.h>
 
 #include <structs/vregister.h>
+#include <structs/stats.h>
 
 #include "struct.h"
 #include "execute.h"
@@ -11,6 +12,7 @@ void cbr_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* rs,
+	union vregister* parameters,
 	struct instruction** next)
 {
 	char vr[10];
@@ -20,11 +22,11 @@ void cbr_instruction_execute(
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
-		printf("line %4i: %8s %8s  %8s -> %-16p", super->line,
+		printf("line %4i: %8s %10s  %10s -> %-10p", super->line,
 			"cbr", vr, "", this->instruction);
 	}
 	
-	int32_t vr_value = rs[this->vr].as_int;
+	int vr_value = rs[this->vr].as_int;
 	
 	*next = vr_value ? this->instruction : super->next;
 	
@@ -34,5 +36,7 @@ void cbr_instruction_execute(
 			vr, vr_value,
 			"%rip", *next);
 	}
+	
+	stats->total++;
 }
 

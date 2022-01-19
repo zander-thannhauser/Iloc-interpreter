@@ -1,5 +1,9 @@
 
-#include <debug.h>
+#include <memory/tinc.h>
+
+#include <structs/vregister.h>
+
+#include <misc/vregister_ll/struct.h>
 
 #include "../new.h"
 
@@ -15,15 +19,15 @@ int new_frame_instruction(
 	struct vregister_ll* args)
 {
 	int error = 0;
+	struct frame_instruction* this;
 	ENTER;
 	
-	struct frame_instruction* this;
-	
-	error = new_instruction(
-		(struct instruction**) &this,
-		line,
-		&frame_instruction_inheritance,
-		sizeof(*this));
+	error = 0
+		?: new_instruction(
+			(struct instruction**) &this,
+			line,
+			&frame_instruction_inheritance,
+			sizeof(*this));
 	
 	if (!error)
 	{

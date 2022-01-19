@@ -1,5 +1,8 @@
 
-#include <debug.h>
+#include <stddef.h>
+
+#include <memory/tmalloc.h>
+#include <memory/tinc.h>
 
 #include "struct.h"
 #include "free.h"

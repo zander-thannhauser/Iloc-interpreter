@@ -1,5 +1,5 @@
 
-#include <debug.h>
+#include <memory/tfree.h>
 
 #include "struct.h"
 #include "free.h"

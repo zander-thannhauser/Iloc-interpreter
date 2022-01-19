@@ -1,15 +1,17 @@
 
+#include <stddef.h>
+
 struct stats
 {
-	size_t add;
-	size_t subtract;
-	size_t multiply;
-	size_t divide;
+	size_t adds;
+	size_t subtracts;
+	size_t multiplys;
+	size_t divides;
 	
-	size_t jump;
+	size_t comparisons;
 	
-	size_t memory_write;
-	size_t memory_read;
+	size_t stores;
+	size_t loads;
 	
 	size_t total;
 };

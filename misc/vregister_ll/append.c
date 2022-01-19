@@ -1,4 +1,7 @@
 
+#include <memory/tmalloc.h>
+#include <memory/tinc.h>
+#include <memory/tfree.h>
 
 #include "struct.h"
 #include "free_link.h"

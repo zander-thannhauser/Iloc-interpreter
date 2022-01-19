@@ -1,5 +1,10 @@
 
-#include <debug.h>
+
+#include <defines/argv0.h>
+
+#include <enums/error.h>
+
+#include <memory/tfree.h>
 
 #include "tokenizer.h"
 #include "read_token.h"
@@ -11,7 +16,8 @@ int parse(
 	FILE* in,
 	struct scope* scope,
 	void* globals,
-	size_t* out_nregisters)
+	size_t* out_nregisters,
+	size_t* out_nparameters)
 {
 	int error = 0;
 	ENTER;
@@ -21,10 +27,13 @@ int parse(
 	error = 0
 		?: read_token(&t)
 		?: parse_data(&t, globals, scope)
-		?: parse_text(&t, scope, out_nregisters);
+		?: parse_text(&t, scope, out_nregisters, out_nparameters);
 	
 	dpv(t.max_vreg);
+	
 	*out_nregisters = t.max_vreg;
+	
+	dpv(*out_nparameters);
 	
 	if (!error && t.token != t_EOF)
 		error = e_syntax_error;

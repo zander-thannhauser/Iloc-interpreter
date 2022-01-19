@@ -1,11 +1,17 @@
 
-#include <debug.h>
+#include <assert.h>
+
+#include <enums/error.h>
+
+#include <memory/tstrdup.h>
+#include <memory/tfree.h>
 
 #include <scope/declare_block.h>
 
 #include <instruction/struct.h>
 #include <instruction/frame/new.h>
 
+#include <misc/vregister_ll/struct.h>
 #include <misc/vregister_ll/new.h>
 #include <misc/vregister_ll/append.h>
 
@@ -17,7 +23,8 @@
 
 int parse_frame(
 	struct tokenizer* t,
-	struct scope* s)
+	struct scope* s,
+	size_t* out_nparameters)
 {
 	int error = 0;
 	char* funcname = NULL;
@@ -54,11 +61,16 @@ int parse_frame(
 	}
 	
 	if (!error)
+	{
+		if (args->n > *out_nparameters)
+			*out_nparameters = args->n;
+		
 		error = 0
 			?: new_frame_instruction(&frame, line, funcname, frame_size, args)
 			?: scope_declare_block(s, funcname, frame)
-			?: (next = frame, parse_instructions(t, s, &next))
+			?: (next = frame, parse_instructions(t, s, out_nparameters, &next))
 			 ;
+	}
 	
 	while (!error
 		&& t->token == t_label
@@ -72,7 +84,7 @@ int parse_frame(
 			?: read_token(t)
 			?: (t->token == t_colon ? 0 : e_syntax_error)
 			?: read_token(t)
-			?: parse_instructions(t, s, &next)
+			?: parse_instructions(t, s, out_nparameters, &next)
 			?: scope_declare_block(s, label, old_next->next)
 			 ;
 		

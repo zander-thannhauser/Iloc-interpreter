@@ -1,7 +1,8 @@
 
-#include <debug.h>
+#include <enums/error.h>
 
 #include <memory/tcalloc.h>
+#include <memory/tfree.h>
 
 #include <structs/stats.h>
 #include <structs/vregister.h>
@@ -29,7 +30,9 @@ int main(int argc, char** argv)
 	struct scope* scope = NULL;
 	void* globals;
 	size_t nregisters;
+	size_t nparameters = 0;
 	union vregister* registers = NULL;
+	union vregister* parameters = NULL;
 	struct instruction* i;
 	struct stats stats = {};
 	void* stack;
@@ -39,16 +42,17 @@ int main(int argc, char** argv)
 		?: process_cmdln(&flags, argc, argv)
 		?: new_scope(&scope)
 		?: mmap_stack(&globals)
-		?: parse(flags->in, scope, globals, &nregisters)
+		?: parse(flags->in, scope, globals, &nregisters, &nparameters)
 		?: scope_lookup_block(scope, "main", &i)
 		?: scope_check_unresolved(scope)
 		?: tcalloc((void**) &registers, nregisters, sizeof(*registers))
+		?: tcalloc((void**) &parameters, nparameters, sizeof(*parameters))
 		?: mmap_stack(&stack)
 		?: init_stack(stack, registers);
 		 ;
 	
 	if (!error) do
-		execute_instruction(i, flags->debug, &stats, registers, &i);
+		execute_instruction(i, flags->debug, &stats, registers, parameters, &i);
 	while (i);
 	
 	if (!error && flags->print_stats)
@@ -57,6 +61,7 @@ int main(int argc, char** argv)
 		error = 0;
 	
 	tfree(registers);
+	tfree(parameters);
 	tfree(scope);
 	tfree(flags);
 	

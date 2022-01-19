@@ -1,4 +1,6 @@
 
+#include <stddef.h>
+
 struct vregister_ll_link
 {
 	unsigned element;

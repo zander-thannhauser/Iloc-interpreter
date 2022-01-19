@@ -5,7 +5,7 @@ struct loadI_instruction
 {
 	struct instruction super;
 	
-	int32_t intlit;
+	int intlit;
 	unsigned vr;
 };
 

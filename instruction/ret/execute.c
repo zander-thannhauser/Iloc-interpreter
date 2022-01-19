@@ -1,7 +1,8 @@
 
-#include <debug.h>
+#include <stdio.h>
 
 #include <structs/vregister.h>
+#include <structs/stats.h>
 
 #include "struct.h"
 #include "execute.h"
@@ -11,6 +12,7 @@ void ret_instruction_execute(
 	bool debug,
 	struct stats* stats,
 	union vregister* rs,
+	union vregister* parameters,
 	struct instruction** next)
 {
 	struct ret_instruction* const this = (typeof(this)) super;
@@ -18,19 +20,12 @@ void ret_instruction_execute(
 	if (debug)
 		printf("line %4u: %8s\n", super->line, "ret");
 	
-	/* movq %rbp, %rsp: */
-	{
-		rs[1].as_int = rs[0].as_int;
-	}
+	/* movq %rbp, %rsp: */  rs[1].as_ptr =    rs[0].as_ptr;
+	/* pop %rbp:        */  rs[0].as_ptr = *++rs[1].as_pptr;
+	/* jump (pop %rsp):*/  *next         = *++rs[1].as_pptr;
 	
-	/* jump (pop %rsp):*/
-	{
-		rs[1].as_int += 8;
-		
-		void** rsp = (void**) (int64_t) rs[1].as_int;
-		
-		*next = *rsp;
-	}
+	stats->total++;
+	
 }
 
 

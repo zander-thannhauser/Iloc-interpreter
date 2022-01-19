@@ -1,7 +1,13 @@
 
-#include <debug.h>
+#include <assert.h>
+#include <stddef.h>
 
 #include <avl/avl.h>
+
+#include <enums/error.h>
+
+#include <memory/tinc.h>
+#include <memory/tfree.h>
 
 #include "global/new.h"
 #include "global/free.h"

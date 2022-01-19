@@ -4,7 +4,11 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include <debug.h>
+#include <defines/argv0.h>
+
+#include <enums/error.h>
+
+#include <memory/tmalloc.h>
 
 #include "flags.h"
 #include "usage.h"
@@ -34,7 +38,7 @@ int process_cmdln(
 	};
 	
 	while (!error && (opt = getopt_long(argc, argv,
-		"i:" "v" "d" "h",
+		"i:" "v" "d" "s" "h",
 		long_options, &option_index)) >= 0)
 	{
 		switch (opt)
@@ -49,6 +53,10 @@ int process_cmdln(
 			
 			case 'd':
 				debug = true;
+				break;
+			
+			case 's':
+				print_stats = true;
 				break;
 			
 			case 'h':

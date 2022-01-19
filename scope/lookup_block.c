@@ -1,7 +1,12 @@
 
+#include <assert.h>
+#include <stddef.h>
+
 #include <avl/avl.h>
 
-#include <debug.h>
+#include <memory/tinc.h>
+#include <memory/tstrdup.h>
+#include <memory/tfree.h>
 
 #include <instruction/301/new.h>
 
