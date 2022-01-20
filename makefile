@@ -103,7 +103,7 @@ buildprefix = gen/$(buildtype)-build/$(link)-link/$(libc)-libc
 default: $(buildprefix)/interpreter
 
 #ARGS += -v
-#ARGS += -d
+ARGS += -d
 ARGS += -s
 
 #ARGS += -i ./examples/test.il
@@ -114,8 +114,8 @@ ARGS += -s
 #ARGS += -i ./examples/check.il       # working
 #ARGS += -i ./examples/dynamic.il     # doesn't work
 #ARGS += -i ./examples/fib.il         # working
-#ARGS += -i ./examples/gcd.il         # working
-ARGS += -i ./examples/helloworld.il  # working
+ARGS += -i ./examples/gcd.il         # working
+#ARGS += -i ./examples/helloworld.il  # working
 #ARGS += -i ./examples/newdyn.il      # doesn't work
 #ARGS += -i ./examples/qs.il          # working
 #ARGS += -i ./examples/while_array.il # working

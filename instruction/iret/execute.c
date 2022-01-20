@@ -22,7 +22,8 @@ void iret_instruction_execute(
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
-		printf("line %4u: %8s %10s", super->line, "iret", vr);
+		printf("line %4u: %8s %10s  %10s    %10s",
+			super->line, "iret", vr, "", "");
 	}
 	
 	int vr_backup = rs[this->vr].as_int;
@@ -34,7 +35,8 @@ void iret_instruction_execute(
 	/* jump (pop %rsp):*/  *next         = *++rs[1].as_pptr;
 	
 	if (debug)
-		printf(" // (%s = %i)\n", vr, vr_backup);
+		printf(" // (%%vr0 = %p, %%vr1 = %p, %s = %i)\n",
+			rs[0].as_ptr, rs[1].as_ptr, vr, vr_backup);
 	
 	stats->total++;
 }

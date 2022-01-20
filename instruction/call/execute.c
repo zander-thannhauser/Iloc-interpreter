@@ -29,7 +29,9 @@ void call_instruction_execute(
 		printf("line %4i: %8s %10p", super->line, "call", this->callme);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			printf(", %%vr%u", u);
+			char vr[10];
+			snprintf(vr, 10, "%%vr%u", u);
+			printf(", %10s", vr);
 		}));
 		
 		printf(" // (");

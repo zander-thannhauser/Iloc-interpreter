@@ -27,7 +27,9 @@ void frame_instruction_execute(
 			".frame", this->name, this->frame_size);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			printf(", %%vr%u", u);
+			char vr[10];
+			snprintf(vr, 10, "%%vr%u", u);
+			printf(", %10s", vr);
 			n++;
 		}));
 	}
