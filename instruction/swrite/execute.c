@@ -15,11 +15,11 @@ void swrite_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	char vr1[10];
 	struct swrite_instruction* const this = (typeof(this)) super;
 	
-	TODO;
-	#if 0
 	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);

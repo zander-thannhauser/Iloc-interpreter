@@ -16,11 +16,11 @@ void loadI_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	char vr[10];
-	char lit[20];
 	struct loadI_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
+	char vr[10];
+	char lit[20];
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		

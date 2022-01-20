@@ -21,10 +21,10 @@ void frame_instruction_execute(
 	struct vregister* ps,
 	struct instruction** next)
 {
+	size_t i = 0;
 	struct frame_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
-	size_t i = 0, n = 0;
 	{
 		printf("line %4u: %8s %10s, %10zu    %10s", super->line,
 			".frame", this->name, this->frame_size, "");
@@ -33,7 +33,6 @@ void frame_instruction_execute(
 			char vr[10];
 			snprintf(vr, 10, "%%vr%u", u);
 			printf(", %10s", vr);
-			n++;
 		}));
 	}
 	#endif
@@ -51,8 +50,6 @@ void frame_instruction_execute(
 	
 	#ifdef ASM_VERBOSE
 	{
-		char vr[20];
-		
 		printf(" // (");
 		
 		printf("%%vr0 = %s, ", print_vreg(&rs[0]));

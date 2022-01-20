@@ -1,4 +1,6 @@
 
+#include <stdbool.h>
+
 #include "../struct.h"
 
 struct loadI_instruction

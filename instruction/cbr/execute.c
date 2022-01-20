@@ -16,10 +16,10 @@ void cbr_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	char vr[10];
 	struct cbr_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
+	char vr[10];
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		

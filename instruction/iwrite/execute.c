@@ -14,10 +14,10 @@ void iwrite_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	char vr1[10];
 	struct iwrite_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
+	char vr1[10];
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		

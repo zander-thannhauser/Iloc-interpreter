@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stdio.h>
 
 #include <structs/vregister.h>
@@ -14,13 +15,13 @@ void fadd_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	char vr1[10];
 	char vr2[10];
 	char vr3[10];
 	struct fadd_instruction* const this = (typeof(this)) super;
 	
-	TODO;
-	#if 0
 	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);

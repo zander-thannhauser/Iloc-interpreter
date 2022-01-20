@@ -1,6 +1,8 @@
 
 #ifdef ASM_VERBOSE
 
+#include <stdio.h>
+
 #include <structs/vregister.h>
 
 #include "print_vreg.h"

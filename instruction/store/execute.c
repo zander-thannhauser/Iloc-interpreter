@@ -14,11 +14,11 @@ void store_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	char vr1[10];
-	char vr2[10];
 	struct store_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
+	char vr1[10];
+	char vr2[10];
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		snprintf(vr2, 10, "%%vr%u", this->vr2);

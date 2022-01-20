@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stdio.h>
 
 #include <structs/vregister.h>
@@ -14,11 +15,11 @@ void iret_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	char vr[10];
 	struct iret_instruction* const this = (typeof(this)) super;
 	
-	TODO;
-	#if 0
 	if (debug)
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);

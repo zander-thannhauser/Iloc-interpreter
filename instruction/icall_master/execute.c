@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stdio.h>
 
 #include <macros/LAMBDA.h>
@@ -20,11 +21,11 @@ void icall_master_instruction_execute(
 	struct vregister* ps,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	size_t i = 0, n = 0;
 	struct icall_master_instruction* this = (typeof(this)) super;
 	
-	TODO;
-	#if 0
 	if (debug)
 	{
 		printf("line %4i: %8s %10p", super->line, "icall", this->callme);
