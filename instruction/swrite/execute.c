@@ -15,8 +15,6 @@ void swrite_instruction_execute(
 	union vregister* parameters,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
 	char vr1[10];
 	struct swrite_instruction* const this = (typeof(this)) super;
 	
@@ -28,10 +26,9 @@ void swrite_instruction_execute(
 			"swrite", vr1, "", "");
 	}
 	
-	int32_t vr_value = rs[this->vr1].as_int;
+	char* vr_value = rs[this->vr1].as_cptr;
 	
-	printf("%i\n", vr_value);
-	#endif
+	puts(vr_value);
 	
 	*next = super->next;
 	

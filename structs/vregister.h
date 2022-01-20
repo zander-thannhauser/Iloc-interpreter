@@ -8,5 +8,6 @@ union vregister
 	void** as_pptr;
 	int*   as_iptr;
 	float* as_fptr;
+	char*  as_cptr;
 };
 

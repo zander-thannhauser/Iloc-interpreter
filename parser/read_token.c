@@ -305,6 +305,8 @@ int read_token(struct tokenizer* this)
 			// Undocumented Instructions:
 			else T(nop);
 			else T(call);
+			else T(icall);
+			else T(iret);
 			else
 			{
 				append('\0');

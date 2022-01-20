@@ -1,0 +1,3 @@
+
+extern const struct instruction_inheritance icall_master_instruction_inheritance;
+

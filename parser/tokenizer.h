@@ -118,6 +118,8 @@ struct tokenizer
 		// Undocumented Instructions
 		t_nop,
 		t_call,
+		t_icall,
+		t_iret,
 	} token;
 	
 	union {

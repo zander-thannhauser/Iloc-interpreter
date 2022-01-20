@@ -17,6 +17,8 @@
 #include <instruction/add/new.h>
 #include <instruction/sub/new.h>
 #include <instruction/mult/new.h>
+#include <instruction/mod/new.h>
+#include <instruction/or/new.h>
 
 // Integer Memory Operations:
 #include <instruction/loadI/new.h>
@@ -25,9 +27,12 @@
 
 // Compare Instructions
 #include <instruction/comp/new.h>
+#include <instruction/testeq/new.h>
 #include <instruction/testgt/new.h>
 #include <instruction/testlt/new.h>
 #include <instruction/testle/new.h>
+#include <instruction/testne/new.h>
+#include <instruction/testge/new.h>
 
 // Floating-point Instructions:
 #include <instruction/f2i/new.h>
@@ -37,10 +42,12 @@
 #include <instruction/fload/new.h>
 
 // I/O Instructions:
+#include <instruction/iread/new.h>
 #include <instruction/iwrite/new.h>
 #include <instruction/swrite/new.h>
 
 // Branch Instructions
+#include <instruction/jumpI/new.h>
 #include <instruction/ret/new.h>
 #include <instruction/cbr/new.h>
 #include <instruction/cbrne/new.h>
@@ -48,6 +55,9 @@
 // Undocumented Instructions:
 #include <instruction/nop/new.h>
 #include <instruction/call/new.h>
+#include <instruction/iret/new.h>
+#include <instruction/icall_master/new.h>
+#include <instruction/icall_slave/new.h>
 
 #include <misc/vregister_ll/struct.h>
 #include <misc/vregister_ll/new.h>
@@ -96,6 +106,7 @@ int parse_instructions(
 	{
 		struct instruction* current = NULL;
 		struct instruction* label = NULL;
+		struct vregister_ll* regs = NULL;
 		
 		unsigned line = t->token_line;
 		
@@ -110,9 +121,9 @@ int parse_instructions(
 			case t_mult:    S R(1) C R(2) A R(3) N(mult, vr1, vr2, vr3); break;
 			case t_lshift:  TODO; break;
 			case t_rshift:  TODO; break;
-			case t_mod:     TODO; break;
+			case t_mod:     S R(1) C R(2) A R(3) N(mod, vr1, vr2, vr3); break;
 			case t_and:     TODO; break;
-			case t_or:      TODO; break;
+			case t_or:      S R(1) C R(2) A R(3) N(or, vr1, vr2, vr3); break;
 			case t_not:     TODO; break;
 			case t_addI:    TODO; break;
 			case t_subI:    TODO; break;
@@ -137,10 +148,10 @@ int parse_instructions(
 			case t_cmp_EQ: TODO; break;
 			case t_cmp_NE: TODO; break;
 			case t_comp:   S R(1) C R(2) A R(3) N(comp,   vr1, vr2, vr3); break;
-			case t_testeq: TODO; break;
-			case t_testne: TODO; break;
+			case t_testeq: S R(1)        A R(3) N(testeq, vr1,      vr3); break;
+			case t_testne: S R(1)        A R(3) N(testne, vr1,      vr3); break;
 			case t_testgt: S R(1)        A R(3) N(testgt, vr1,      vr3); break;
-			case t_testge: TODO; break;
+			case t_testge: S R(1)        A R(3) N(testge, vr1,      vr3); break;
 			case t_testlt: S R(1)        A R(3) N(testlt, vr1,      vr3); break;
 			case t_testle: S R(1)        A R(3) N(testle, vr1,      vr3); break;
 			
@@ -162,13 +173,13 @@ int parse_instructions(
 			
 			// I/O Instructions:
 			case t_fread:  TODO; break;
-			case t_iread:  TODO; break;
+			case t_iread:  S R(1) N(iread, vr1); break;
 			case t_fwrite: TODO; break;
 			case t_iwrite: S R(1) N(iwrite, vr1); break;
 			case t_swrite: S R(1) N(swrite, vr1); break;
 			
 			// Branch Instructions:
-			case t_jumpI:  TODO; break;
+			case t_jumpI:  S A L N(jumpI, label); break;
 			case t_jump:   TODO; break;
 			case t_ret:    S          N(ret); break;
 			case t_cbr:    S R(1) A L N(cbr,   vr1, label); break;
@@ -185,8 +196,6 @@ int parse_instructions(
 			
 			case t_call:
 			{
-				struct vregister_ll* regs = NULL;
-				
 				S L ?: new_vregister_ll(&regs);
 				
 				while (!error && t->token == t_comma)
@@ -199,10 +208,46 @@ int parse_instructions(
 					
 					error = new_call_instruction(&current, line, label, regs);
 				}
-				
-				tfree(regs);
 				break;
 			}
+			
+			case t_icall:
+			{
+				struct instruction* master = NULL;
+				
+				S L ?: new_vregister_ll(&regs);
+				
+				while (!error && t->token == t_comma)
+					S R(1) ?: vregister_ll_append(regs, vr1);
+				
+				if (!error)
+				{
+					if (regs->n > *out_nparameters)
+						*out_nparameters = regs->n;
+					
+					error = 0 A R(3);
+				}
+				
+				if (!error)
+					error = 0
+						?: new_icall_master_instruction(&master, line, label, regs, vr3)
+						?: new_icall_slave_instruction(&current, vr3);
+				
+				if (!error)
+				{
+					// guarantee space for the return value:
+					if (1 > *out_nparameters)
+						*out_nparameters = 1;
+						
+					(*next)->next = tinc(master);
+					(*next) = master;
+				}
+				
+				tfree(master);
+				break;
+			}
+			
+			case t_iret: S R(1) N(iret, vr1); break;
 			
 			default:
 				keep_going = false;
@@ -217,6 +262,7 @@ int parse_instructions(
 			(*next) = current;
 		}
 		
+		tfree(regs);
 		tfree(label);
 		tfree(current);
 	}
