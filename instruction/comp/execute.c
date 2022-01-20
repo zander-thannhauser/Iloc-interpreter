@@ -4,15 +4,16 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/print_vreg.h>
+
 #include "struct.h"
 #include "execute.h"
 
 void comp_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
@@ -20,7 +21,7 @@ void comp_instruction_execute(
 	char vr3[10];
 	struct comp_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
@@ -29,6 +30,7 @@ void comp_instruction_execute(
 		printf("line %4i: %8s %10s, %10s => %-10s", super->line,
 			"comp", vr1, vr2, vr3);
 	}
+	#endif
 	
 	int vr1_value = rs[this->vr1].as_int;
 	int vr2_value = rs[this->vr2].as_int;
@@ -43,13 +45,15 @@ void comp_instruction_execute(
 	
 	rs[this->vr3].as_int = vr3_value;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%s = %i, %s = %i, %s = %i)\n",
-			vr1, vr1_value,
-			vr2, vr2_value,
-			vr3, vr3_value);
+		rs[this->vr3].kind = vk_int;
+		
+		printf(" // (%s = %s, ", vr1, print_vreg(&rs[this->vr1]));
+		printf("%s = %s, ", vr2, print_vreg(&rs[this->vr2]));
+		printf("%s = %s)\n", vr3, print_vreg(&rs[this->vr3]));
 	}
+	#endif
 	
 	*next = super->next;
 	

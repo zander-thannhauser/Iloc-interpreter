@@ -24,7 +24,6 @@ int process_cmdln(
 	
 	const char* input_path = NULL;
 	bool verbose = false;
-	bool debug = false;
 	bool print_stats = false;
 	
 	// for getopt:
@@ -32,7 +31,6 @@ int process_cmdln(
 	const struct option long_options[] = {
 		{"input",  required_argument, 0, 'i'},
 		{"verbose",      no_argument, 0, 'v'},
-		{"debug",        no_argument, 0, 'd'},
 		{"print-stats",  no_argument, 0, 's'},
 		{0, 0, 0, 0}
 	};
@@ -49,10 +47,6 @@ int process_cmdln(
 			
 			case 'v':
 				verbose = false;
-				break;
-			
-			case 'd':
-				debug = true;
 				break;
 			
 			case 's':
@@ -94,16 +88,12 @@ int process_cmdln(
 	
 	if (!error)
 	{
-		#ifdef SYSTEM_LIBC
-		if (debug)
-		{
-			setvbuf(stdout, NULL, _IONBF, 0);
-		}
+		#if defined(SYSTEM_LIBC) && defined(ASM_VERBOSE)
+		setvbuf(stdout, NULL, _IONBF, 0);
 		#endif
 		
 		flags->in  = in, in = NULL;
 		flags->verbose = verbose;
-		flags->debug = debug;
 		flags->print_stats = print_stats;
 		
 		*out_flags = flags;

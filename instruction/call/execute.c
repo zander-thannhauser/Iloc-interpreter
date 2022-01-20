@@ -15,15 +15,16 @@
 
 void call_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* ps,
+	struct vregister* rs,
+	struct vregister* ps,
 	struct instruction** next)
 {
 	size_t i = 0, n = 0;
 	struct call_instruction* this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		printf("line %4i: %8s %10p", super->line, "call", this->callme);
@@ -50,6 +51,7 @@ void call_instruction_execute(
 	
 	/* push %rip:    */ *rs[1].as_pptr-- = super->next;
 	/* jump to call: */ *next            = this->callme;
+	#endif
 	
 	stats->total++;
 }

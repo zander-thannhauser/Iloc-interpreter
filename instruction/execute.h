@@ -1,12 +1,11 @@
 
 struct instruction;
 struct stats;
-union vregister;
+struct vregister;
 
 void execute_instruction(
 	struct instruction* this,
-	bool debug,
 	struct stats* stats,
-	union vregister* registers,
-	union vregister* pregisters,
+	struct vregister* registers,
+	struct vregister* pregisters,
 	struct instruction** next);

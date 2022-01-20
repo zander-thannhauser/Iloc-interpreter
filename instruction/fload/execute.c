@@ -9,16 +9,17 @@
 
 void fload_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
 	char vr2[10];
 	struct fload_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
@@ -38,6 +39,7 @@ void fload_instruction_execute(
 			vr1,  vr1_value,
 			vr1, *vr1_value,
 			vr2,  vr2_value);
+	#endif
 	
 	stats->loads++;
 	stats->total++;

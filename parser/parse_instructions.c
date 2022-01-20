@@ -76,6 +76,7 @@ int parse_instructions(
 	int error = 0;
 	bool keep_going = true;
 	int intlit;
+	bool isint;
 	unsigned vr1, vr2, vr3;
 	ENTER;
 	
@@ -98,7 +99,7 @@ int parse_instructions(
 	#define L        E(t_label) LL T
 	#define G        E(t_label) GG T
 	
-	#define IorG     ?: (t->token == t_integer_literal ? (0 II) : (0 GG)) T
+	#define IorG     ?: ((isint = t->token == t_integer_literal) ? (0 II) : (0 GG)) T
 	
 	#define N(name, ...) ?: new_##name##_instruction(&current, line __VA_OPT__(,) __VA_ARGS__)
 	
@@ -132,7 +133,7 @@ int parse_instructions(
 			case t_rshiftI: TODO; break;
 			
 			// Integer Memory Operations
-			case t_loadI:   S IorG A R(1) N(loadI, intlit, vr1); break;
+			case t_loadI:   S IorG A R(1) N(loadI, intlit, isint, vr1); break;
 			case t_load:    S R(1) A R(3) N(load,  vr1, vr3); break;
 			case t_loadAI:  TODO; break;
 			case t_loadAO:  TODO; break;

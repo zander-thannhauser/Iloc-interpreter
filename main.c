@@ -31,8 +31,8 @@ int main(int argc, char** argv)
 	void* globals;
 	size_t nregisters;
 	size_t nparameters = 0;
-	union vregister* registers = NULL;
-	union vregister* parameters = NULL;
+	struct vregister* registers = NULL;
+	struct vregister* parameters = NULL;
 	struct instruction* i;
 	struct stats stats = {};
 	void* stack;
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 		 ;
 	
 	if (!error) do
-		execute_instruction(i, flags->debug, &stats, registers, parameters, &i);
+		execute_instruction(i, &stats, registers, parameters, &i);
 	while (i);
 	
 	if (!error && flags->print_stats)

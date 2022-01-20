@@ -88,6 +88,17 @@ else
 $(error "invalid libc option!");
 endif
 
+asm ?= quiet
+#asm ?= verbose
+
+ifeq ($(asm), verbose)
+CPPFLAGS += -D ASM_VERBOSE
+else ifeq ($(asm), quiet)
+CPPFLAGS += -D ASM_QUIET
+else
+$(error "invalid asm_debug option!");
+endif
+
 on_error ?= do_nothing
 
 ifeq ($(on_error), do_nothing)
@@ -98,23 +109,21 @@ else
 $(error "invalid libc option!");
 endif
 
-buildprefix = gen/$(buildtype)-build/$(link)-link/$(libc)-libc
+buildprefix = gen/$(asm)-asm/$(buildtype)-build/$(link)-link/$(libc)-libc
 
 default: $(buildprefix)/interpreter
 
 #ARGS += -v
-ARGS += -d
-ARGS += -s
 
 #ARGS += -i ./examples/test.il
 
 #ARGS += -i ./examples/arrayparam.il  # working
-#ARGS += -i ./examples/bubble.il      # working
+ARGS += -i ./examples/bubble.il      # working
 #ARGS += -i ./examples/check.dbre.il  # working
 #ARGS += -i ./examples/check.il       # working
 #ARGS += -i ./examples/dynamic.il     # doesn't work
 #ARGS += -i ./examples/fib.il         # working
-ARGS += -i ./examples/gcd.il         # working
+#ARGS += -i ./examples/gcd.il         # working
 #ARGS += -i ./examples/helloworld.il  # working
 #ARGS += -i ./examples/newdyn.il      # doesn't work
 #ARGS += -i ./examples/qs.il          # working

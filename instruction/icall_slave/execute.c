@@ -15,10 +15,9 @@
 
 void icall_slave_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* ps,
+	struct vregister* rs,
+	struct vregister* ps,
 	struct instruction** next)
 {
 	struct icall_slave_instruction* this = (typeof(this)) super;

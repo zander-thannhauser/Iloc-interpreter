@@ -7,24 +7,27 @@
 
 #include <misc/vregister_ll/foreach.h>
 
+#ifdef ASM_VERBOSE
+#include <misc/print_vreg.h>
+#endif
+
 #include "struct.h"
 #include "execute.h"
 
 void frame_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* ps,
+	struct vregister* rs,
+	struct vregister* ps,
 	struct instruction** next)
 {
-	size_t i = 0, n = 0;
 	struct frame_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	size_t i = 0, n = 0;
 	{
-		printf("line %4u: %8s %10s, %10zu", super->line,
-			".frame", this->name, this->frame_size);
+		printf("line %4u: %8s %10s, %10zu    %10s", super->line,
+			".frame", this->name, this->frame_size, "");
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
 			char vr[10];
@@ -33,6 +36,7 @@ void frame_instruction_execute(
 			n++;
 		}));
 	}
+	#endif
 	
 	/* pushq %rbp:      */ *rs[1].as_pptr-- = rs[0].as_ptr;
 	/* movq %rsp, %rbp: */  rs[0].as_ptr    = rs[1].as_ptr;
@@ -45,17 +49,23 @@ void frame_instruction_execute(
 		}));
 	}
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%%vr0 = %p, %%vr1 = %p",
-			rs[0].as_ptr, rs[1].as_ptr);
+		char vr[20];
+		
+		printf(" // (");
+		
+		printf("%%vr0 = %s, ", print_vreg(&rs[0]));
+		
+		printf("%%vr1 = %s", print_vreg(&rs[1]));
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			printf(", %%vr%u = %i", u, rs[u].as_int);
+			printf(", %%vr%u = %s", u, print_vreg(&rs[u]));
 		}));
 		
 		printf(")\n");
 	}
+	#endif
 	
 	*next = super->next;
 }

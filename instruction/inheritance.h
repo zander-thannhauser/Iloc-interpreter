@@ -2,12 +2,12 @@
 #include <stdbool.h>
 
 struct instruction;
-union vregister;
+struct vregister;
 struct stats;
 
 struct instruction_inheritance
 {
-	void (*execute)(struct instruction*, bool, struct stats*, union vregister*, union vregister*, struct instruction**);
+	void (*execute)(struct instruction*, struct stats*, struct vregister*, struct vregister*, struct instruction**);
 	void (*free)(struct instruction*);
 };
 

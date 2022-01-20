@@ -9,16 +9,17 @@
 
 void f2i_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* registers,
-	union vregister* parameters,
+	struct vregister* registers,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr_src[10];
 	char vr_dst[10];
 	struct f2i_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		snprintf(vr_src, 10, "%%vr%u", this->vr_src);
@@ -34,6 +35,7 @@ void f2i_instruction_execute(
 		printf(" // (%s = %gf, %s = %i)\n",
 			vr_src, registers[this->vr_src].as_float,
 			vr_dst, registers[this->vr_dst].as_int);
+	#endif
 	
 	*next = super->next;
 	

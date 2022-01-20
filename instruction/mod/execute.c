@@ -9,10 +9,9 @@
 
 void mod_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
@@ -20,6 +19,8 @@ void mod_instruction_execute(
 	char vr3[10];
 	struct mod_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
@@ -43,6 +44,7 @@ void mod_instruction_execute(
 			vr2, vr2_backup,
 			vr3, vr3_backup);
 	}
+	#endif
 	
 	stats->total++;
 	

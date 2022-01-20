@@ -10,15 +10,16 @@
 
 void swrite_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
 	struct swrite_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
@@ -32,6 +33,7 @@ void swrite_instruction_execute(
 	puts(vr_value);
 	
 	*next = super->next;
+	#endif
 	
 	stats->total++;
 }

@@ -7,7 +7,6 @@ struct cmdln_flags
 	FILE* in;
 	
 	bool verbose;
-	bool debug;
 	
 	bool print_stats;
 };

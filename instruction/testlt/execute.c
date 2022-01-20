@@ -4,22 +4,23 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/print_vreg.h>
+
 #include "struct.h"
 #include "execute.h"
 
 void testlt_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr1[10];
 	char vr2[10];
 	struct testlt_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
@@ -27,18 +28,16 @@ void testlt_instruction_execute(
 		printf("line %4i: %8s %10s  %10s => %-10s", super->line,
 			"testlt", vr1, "", vr2);
 	}
+	#endif
 	
-	int vr1_value = rs[this->vr1].as_int;
-	int vr2_value = vr1_value < 0;
+	rs[this->vr2].as_int = rs[this->vr1].as_int < 0;
 	
-	rs[this->vr2].as_int = vr2_value;
-	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%s = %i, %s = %i)\n",
-			vr1, vr1_value,
-			vr2, vr2_value);
+		printf(" // (%s = %s, ", vr1, print_vreg(&rs[this->vr1]));
+		printf("%s = %s)\n", vr2, print_vreg(&rs[this->vr2]));
 	}
+	#endif
 	
 	*next = super->next;
 	

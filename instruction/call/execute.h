@@ -1,14 +1,12 @@
 
-#include <stdbool.h>
 
 struct instruction;
-union vregister;
+struct vregister;
 struct stats;
 
 void call_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* registers,
-	union vregister* parameters,
+	struct vregister* registers,
+	struct vregister* parameters,
 	struct instruction** next);

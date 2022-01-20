@@ -9,6 +9,7 @@ int new_loadI_instruction(
 	struct instruction** new,
 	unsigned line,
 	int intlit,
+	bool isint,
 	unsigned vr)
 {
 	int error = 0;
@@ -25,6 +26,7 @@ int new_loadI_instruction(
 	if (!error)
 	{
 		this->intlit = intlit;
+		this->isint = isint;
 		this->vr = vr;
 		
 		*new = (struct instruction*) this;

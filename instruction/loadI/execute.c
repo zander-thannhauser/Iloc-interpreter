@@ -1,34 +1,48 @@
 
 #include <stdio.h>
+
 #include <structs/vregister.h>
 #include <structs/stats.h>
+
+#include <misc/print_vreg.h>
 
 #include "struct.h"
 #include "execute.h"
 
 void loadI_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* registers,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr[10];
+	char lit[20];
 	struct loadI_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
-		printf("line %4i: %8s %10i  %10s => %-10s",
-			super->line, "loadI", this->intlit, "", vr);
+		if (this->isint)
+			sprintf(lit, "%i", this->intlit);
+		else
+			sprintf(lit, "%p", (void*) this->intlit);
+		
+		printf("line %4i: %8s %10s  %10s => %-10s",
+			super->line, "loadI", lit, "", vr);
 	}
+	#endif
 	
-	registers[this->vr].as_int = this->intlit;
+	rs[this->vr].as_int = this->intlit;
 	
-	if (debug)
-		printf(" // (%%vr%u = %i)\n", this->vr, registers[this->vr].as_int);
+	#ifdef ASM_VERBOSE
+	{
+		rs[this->vr].kind = this->isint ? vk_int : vk_ptr;
+		
+		printf(" // (%%vr%u = %s)\n", this->vr, print_vreg(&rs[this->vr]));
+	}
+	#endif
 	
 	*next = super->next;
 	

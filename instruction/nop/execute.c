@@ -9,14 +9,14 @@
 
 void nop_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* registers,
-	union vregister* parameters,
+	struct vregister* registers,
+	struct vregister* parameters,
 	struct instruction** next)
 {
-	if (debug)
-		printf("line %4i: %8s\n", super->line, "nop");
+	#ifdef ASM_VERBOSE
+	printf("line %4i: %8s\n", super->line, "nop");
+	#endif
 	
 	*next = super->next;
 	

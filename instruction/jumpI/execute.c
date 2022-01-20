@@ -9,19 +9,21 @@
 
 void jumpI_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct jumpI_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		printf("line %4i: %8s %10s  %10s -> %-10p\n", super->line,
 			"jumpI", "", "", this->instruction);
 	}
+	#endif
 	
 	*next = this->instruction;
 	

@@ -9,15 +9,16 @@
 
 void iret_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	char vr[10];
 	struct iret_instruction* const this = (typeof(this)) super;
 	
+	TODO;
+	#if 0
 	if (debug)
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
@@ -39,6 +40,7 @@ void iret_instruction_execute(
 			rs[0].as_ptr, rs[1].as_ptr, vr, vr_backup);
 	
 	stats->total++;
+	#endif
 }
 
 

@@ -9,27 +9,30 @@
 
 void ret_instruction_execute(
 	struct instruction* super,
-	bool debug,
 	struct stats* stats,
-	union vregister* rs,
-	union vregister* parameters,
+	struct vregister* rs,
+	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct ret_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	{
 		printf("line %4u: %8s %10s  %10s    %10s",
 			super->line, "ret", "", "", "");
+	}
+	#endif
 	
 	/* movq %rbp, %rsp: */  rs[1].as_ptr =    rs[0].as_ptr;
 	/* pop %rbp:        */  rs[0].as_ptr = *++rs[1].as_pptr;
 	/* jump (pop %rsp):*/  *next         = *++rs[1].as_pptr;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
 		printf(" // (%%vr0 = %p, %%vr1 = %p)\n",
 			rs[0].as_ptr, rs[1].as_ptr);
 	}
+	#endif
 	
 	stats->total++;
 	

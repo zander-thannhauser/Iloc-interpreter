@@ -46,7 +46,7 @@
 	struct instruction_inheritance;
 	struct vregister_ll;
 	
-	union vregister;
+	struct vregister;
 	
 #endif
 

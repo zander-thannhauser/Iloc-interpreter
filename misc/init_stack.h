@@ -1,1 +1,1 @@
-int init_stack(void* stack, union vregister* rs);
+int init_stack(void* stack, struct vregister* rs);
