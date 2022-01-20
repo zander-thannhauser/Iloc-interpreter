@@ -10,7 +10,7 @@ void print_stats(struct stats* this)
 {
 	ENTER;
 	
-	setlocale(LC_ALL, "");
+	// setlocale(LC_ALL, "");
 	
 	if (this->adds)        printf("%12s: %'5u\n", "adds",        this->adds);
 	if (this->subtracts)   printf("%12s: %'5u\n", "subtracts",   this->subtracts);

@@ -114,11 +114,11 @@ ARGS += -s
 #ARGS += -i ./examples/check.il       # working
 #ARGS += -i ./examples/dynamic.il     # doesn't work
 #ARGS += -i ./examples/fib.il         # working
-ARGS += -i ./examples/gcd.il          # working
-#ARGS += -i ./examples/helloworld.il  # working
+#ARGS += -i ./examples/gcd.il         # working
+ARGS += -i ./examples/helloworld.il  # working
 #ARGS += -i ./examples/newdyn.il      # doesn't work
-#ARGS += -i ./examples/qs.il          # needs jumpI
-#ARGS += -i ./examples/while_array.il # needs jumpI
+#ARGS += -i ./examples/qs.il          # working
+#ARGS += -i ./examples/while_array.il # working
 
 run: $(buildprefix)/interpreter
 	$< $(ARGS)

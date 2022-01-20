@@ -1,5 +1,10 @@
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+
+#include <defines/argv0.h>
 
 #include <structs/vregister.h>
 #include <structs/stats.h>
@@ -27,19 +32,16 @@ void iread_instruction_execute(
 	
 	int value;
 	
-	bool keep_going = true;
 	char* m;
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
 	
 	do if (printf("%%i> "), (nread = getline(&line, &len, stdin)) < 0)
-		fprintf(stderr, "%s: getline: %m\n", argv0),
-		abort();
-	else if (errno = 0, line[nread - 1] = '\0', value = strtol(line, &m, 10),
-		errno || *m)
-		fprintf(stderr, "%s: invalid int32 \"%s\"!\n", argv0, line),
-		abort();
+		fprintf(stderr, "%s: getline: %m\n", argv0);
+	else if (errno = 0, line[nread - 1] = '\0',
+		value = strtol(line, &m, 10), errno || *m)
+		fprintf(stderr, "%s: invalid int32 \"%s\"!\n", argv0, line);
 	else break;
 	while (1);
 	
