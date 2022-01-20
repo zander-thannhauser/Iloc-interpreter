@@ -4,10 +4,14 @@ CC = gcc
 CPPFLAGS += -D _GNU_SOURCE
 CPPFLAGS += -I .
 CPPFLAGS += -isystem ./extern
+CPPFLAGS += -D DYNAMIC_LINK
+CPPFLAGS += -D SYSTEM_LIBC
 
 CFLAGS += -m32 -Wall -Werror -Wfatal-errors
 
 LDFLAGS += -m32
+
+LDLIBS += -lm
 
 FINDFLAGS ?= -name '*.c'
 
@@ -15,6 +19,7 @@ buildtype ?= release
 
 ifeq ($(buildtype), release)
 CPPFLAGS += -D RELEASE
+
 CPPFLAGS += -D ENTER=
 CPPFLAGS += -D HERE=
 CPPFLAGS += -D EXIT=
@@ -52,43 +57,6 @@ else
 $(error "invalid buildtype!");
 endif
 
-link ?= dynamic
-#link ?= static
-
-ifeq ($(link), static)
-CPPFLAGS += -D STATIC_LINK
-LDFLAGS += -static
-LDFLAGS += -fwhole-program
-else ifeq ($(link), dynamic)
-CPPFLAGS += -D DYNAMIC_LINK
-else
-$(error "invalid link value!");
-endif
-
-libc ?= system
-#libc ?= local
-
-ifeq ($(libc), system)
-CPPFLAGS += -D SYSTEM_LIBC
-
-LDLIBS += -lm
-
-FINDFLAGS += -! -path './extern/zlibc/*'
-else ifeq ($(libc), local)
-CPPFLAGS += -D LOCAL_LIBC
-CPPFLAGS += -nostdinc
-CPPFLAGS += -isystem ./extern/zlibc
-
-CFLAGS += -fno-stack-protector
-
-LDFLAGS += -Wno-free-nonheap-object
-LDFLAGS += -nostdlib -nodefaultlibs
-
-FINDFLAGS += -or -name '*.S'
-else
-$(error "invalid libc option!");
-endif
-
 asm ?= quiet
 #asm ?= verbose
 
@@ -110,7 +78,7 @@ else
 $(error "invalid libc option!");
 endif
 
-buildprefix = gen/$(asm)-asm/$(buildtype)-build/$(link)-link/$(libc)-libc
+buildprefix = gen/$(asm)-asm/$(buildtype)-build
 
 default: $(buildprefix)/interpreter
 

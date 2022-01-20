@@ -232,9 +232,11 @@
 			debug_depth, "", #val, (val)); \
 		}
 	
-	#define ddprintf(format, ...) \
+	#define ddprintf(format, ...) { \
 		assert(debug_depth >= 0); \
-		printf("%*s" format, debug_depth, "", ## __VA_ARGS__)
+		printf("%*s" format, debug_depth, "", ## __VA_ARGS__) \
+	}
+	
 #else
 	#define dpv(x) ;
 	#define dpvb(x) ;
