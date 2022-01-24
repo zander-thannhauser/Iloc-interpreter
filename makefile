@@ -79,14 +79,15 @@ endif
 buildprefix = gen/$(asm)-asm/$(buildtype)-build
 
 default: $(buildprefix)/interpreter
+	@ ln -svf $<
 
 ARGS += -s
 
 #ARGS += -i ./examples/test.il
-ARGS += -i ./examples/external.il
+#ARGS += -i ./examples/external.il
 
 #ARGS += -i ./examples/arrayparam.il  # working
-#ARGS += -i ./examples/bubble.il      # working
+ARGS += -i ./examples/bubble.il      # working
 #ARGS += -i ./examples/check.dbre.il  # working
 #ARGS += -i ./examples/check.il       # working
 #ARGS += -i ./examples/dynamic.il     # doesn't work

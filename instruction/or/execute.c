@@ -26,8 +26,8 @@ void or_instruction_execute(
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
 		snprintf(vr3, 10, "%%vr%u", this->vr3);
 		
-		printf("line %4i: %8s %10s, %10s => %-10s", super->line,
-			"or", vr1, vr2, vr3);
+		printf("line %4i: %8s %10s, %10s => %10s  %10s", super->line,
+			"or", vr1, vr2, vr3, "");
 	}
 	#endif
 	
