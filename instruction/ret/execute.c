@@ -18,8 +18,8 @@ void ret_instruction_execute(
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf("line %4u: %8s %10s  %10s    %10s",
-			super->line, "ret", "", "", "");
+		printf("line %4u: %8s %10s  %10s    %10s  %10s",
+			super->line, "ret", "", "", "", "");
 	}
 	#endif
 	

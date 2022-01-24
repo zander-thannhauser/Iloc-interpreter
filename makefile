@@ -4,8 +4,6 @@ CC = gcc
 CPPFLAGS += -D _GNU_SOURCE
 CPPFLAGS += -I .
 CPPFLAGS += -isystem ./extern
-CPPFLAGS += -D DYNAMIC_LINK
-CPPFLAGS += -D SYSTEM_LIBC
 
 CFLAGS += -m32 -Wall -Werror -Wfatal-errors
 
@@ -82,12 +80,13 @@ buildprefix = gen/$(asm)-asm/$(buildtype)-build
 
 default: $(buildprefix)/interpreter
 
-#ARGS += -v
+ARGS += -s
 
 #ARGS += -i ./examples/test.il
+ARGS += -i ./examples/external.il
 
 #ARGS += -i ./examples/arrayparam.il  # working
-ARGS += -i ./examples/bubble.il      # working
+#ARGS += -i ./examples/bubble.il      # working
 #ARGS += -i ./examples/check.dbre.il  # working
 #ARGS += -i ./examples/check.il       # working
 #ARGS += -i ./examples/dynamic.il     # doesn't work

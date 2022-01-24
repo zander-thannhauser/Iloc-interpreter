@@ -47,7 +47,7 @@ void fmult_instruction_execute(
 	}
 	#endif
 	
-	stats->multiplys++;
+	stats->mults++;
 	stats->total++;
 	
 	*next = super->next;

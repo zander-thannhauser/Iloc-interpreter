@@ -23,8 +23,8 @@ void cbr_instruction_execute(
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
-		printf("line %4i: %8s %10s  %10s -> %-10p", super->line,
-			"cbr", vr, "", this->instruction);
+		printf("line %4i: %8s %10s  %10s -> %10p  %10s", super->line,
+			"cbr", vr, "", this->instruction, "");
 	}
 	#endif
 	

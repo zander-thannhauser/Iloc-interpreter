@@ -13,9 +13,8 @@ void print_stats(struct stats* this)
 	// setlocale(LC_ALL, "");
 	
 	if (this->adds)        printf("%12s: %'5u\n", "adds",        this->adds);
-	if (this->subtracts)   printf("%12s: %'5u\n", "subtracts",   this->subtracts);
-	if (this->multiplys)   printf("%12s: %'5u\n", "multiplys",   this->multiplys);
-	if (this->divides)     printf("%12s: %'5u\n", "divides",     this->divides);
+	if (this->subs)        printf("%12s: %'5u\n", "subtracts",   this->subs);
+	if (this->mults)       printf("%12s: %'5u\n", "multiplys",   this->mults);
 	
 	if (this->comparisons) printf("%12s: %'5u\n", "comparisons", this->comparisons);
 	

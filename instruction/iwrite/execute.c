@@ -21,8 +21,8 @@ void iwrite_instruction_execute(
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		
-		printf("line %4i: %8s %10s  %10s    %-10s\n", super->line,
-			"iwrite", vr1, "", "");
+		printf("line %4i: %8s %10s\n", super->line,
+			"iwrite", vr1);
 	}
 	#endif
 	

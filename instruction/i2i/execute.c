@@ -25,8 +25,8 @@ void i2i_instruction_execute(
 	snprintf(vr_src, 10, "%%vr%u", this->vr_src);
 	snprintf(vr_dst, 10, "%%vr%u", this->vr_dst);
 	
-	printf("line %4i: %8s %10s  %10s => %-10s", super->line,
-		"i2i", vr_src, "", vr_dst);
+	printf("line %4i: %8s %10s  %10s => %10s  %10s", super->line,
+		"i2i", vr_src, "", vr_dst, "");
 	#endif
 	
 	rs[this->vr_dst] = rs[this->vr_src];

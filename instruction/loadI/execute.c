@@ -29,8 +29,8 @@ void loadI_instruction_execute(
 		else
 			sprintf(lit, "%p", (void*) this->intlit);
 		
-		printf("line %4i: %8s %10s  %10s => %-10s",
-			super->line, "loadI", lit, "", vr);
+		printf("line %4i: %8s %10s  %10s => %10s  %10s",
+			super->line, "loadI", lit, "", vr, "");
 	}
 	#endif
 	

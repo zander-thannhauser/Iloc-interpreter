@@ -19,11 +19,16 @@
 #include <instruction/mult/new.h>
 #include <instruction/mod/new.h>
 #include <instruction/or/new.h>
+#include <instruction/addI/new.h>
+#include <instruction/multI/new.h>
 
 // Integer Memory Operations:
 #include <instruction/loadI/new.h>
 #include <instruction/load/new.h>
+#include <instruction/loadAO/new.h>
 #include <instruction/store/new.h>
+#include <instruction/storeAI/new.h>
+#include <instruction/storeAO/new.h>
 
 // Compare Instructions
 #include <instruction/comp/new.h>
@@ -51,6 +56,9 @@
 #include <instruction/ret/new.h>
 #include <instruction/cbr/new.h>
 #include <instruction/cbrne/new.h>
+#include <instruction/cbr_LE/new.h>
+#include <instruction/cbr_GT/new.h>
+#include <instruction/cbr_GE/new.h>
 
 // Undocumented Instructions:
 #include <instruction/nop/new.h>
@@ -77,7 +85,7 @@ int parse_instructions(
 	bool keep_going = true;
 	int intlit;
 	bool isint;
-	unsigned vr1, vr2, vr3;
+	unsigned vr1, vr2, vr3; // , vr4;
 	ENTER;
 	
 	dpv(*next);
@@ -116,19 +124,19 @@ int parse_instructions(
 		switch (t->token)
 		{
 			// Integer Arthmetic Instructions:
-			case t_i2i:     S R(1)        A R(3) N(i2i,  vr1,      vr3); break;
-			case t_add:     S R(1) C R(2) A R(3) N(add,  vr1, vr2, vr3); break;
-			case t_sub:     S R(1) C R(2) A R(3) N(sub,  vr1, vr2, vr3); break;
-			case t_mult:    S R(1) C R(2) A R(3) N(mult, vr1, vr2, vr3); break;
+			case t_i2i:     S R(1)        A R(3) N(i2i,   vr1,         vr3); break;
+			case t_add:     S R(1) C R(2) A R(3) N(add,   vr1,    vr2, vr3); break;
+			case t_sub:     S R(1) C R(2) A R(3) N(sub,   vr1,    vr2, vr3); break;
+			case t_mult:    S R(1) C R(2) A R(3) N(mult,  vr1,    vr2, vr3); break;
 			case t_lshift:  TODO; break;
 			case t_rshift:  TODO; break;
-			case t_mod:     S R(1) C R(2) A R(3) N(mod, vr1, vr2, vr3); break;
+			case t_mod:     S R(1) C R(2) A R(3) N(mod,   vr1,    vr2, vr3); break;
 			case t_and:     TODO; break;
-			case t_or:      S R(1) C R(2) A R(3) N(or, vr1, vr2, vr3); break;
+			case t_or:      S R(1) C R(2) A R(3) N(or,    vr1,    vr2, vr3); break;
 			case t_not:     TODO; break;
-			case t_addI:    TODO; break;
+			case t_addI:    S R(1) C I    A R(3) N(addI,  vr1, intlit, vr3); break;
 			case t_subI:    TODO; break;
-			case t_multI:   TODO; break;
+			case t_multI:   S R(1) C I    A R(3) N(multI, vr1, intlit, vr3); break;
 			case t_lshiftI: TODO; break;
 			case t_rshiftI: TODO; break;
 			
@@ -136,10 +144,10 @@ int parse_instructions(
 			case t_loadI:   S IorG A R(1) N(loadI, intlit, isint, vr1); break;
 			case t_load:    S R(1) A R(3) N(load,  vr1, vr3); break;
 			case t_loadAI:  TODO; break;
-			case t_loadAO:  TODO; break;
-			case t_store:   S R(1) A R(3) N(store, vr1, vr3); break;
-			case t_storeAI: TODO; break;
-			case t_storeAO: TODO; break;
+			case t_loadAO:  S R(1) C R(2) A R(3)        N(loadAO, vr1, vr2, vr3); break;
+			case t_store:   S R(1)        A R(3)        N(store, vr1, vr3); break;
+			case t_storeAI: S R(1)        A R(3) C I    N(storeAI, vr1, vr3, intlit); break;
+			case t_storeAO: S R(1)        A R(2) C R(3) N(storeAO, vr1, vr2, vr3); break;
 			
 			// Compare Instructions
 			case t_cmp_LT: TODO; break;
@@ -186,9 +194,9 @@ int parse_instructions(
 			case t_cbr:    S R(1) A L N(cbr,   vr1, label); break;
 			case t_cbrne:  S R(1) A L N(cbrne, vr1, label); break;
 			case t_cbr_LT: TODO; break;
-			case t_cbr_LE: TODO; break;
-			case t_cbr_GT: TODO; break;
-			case t_cbr_GE: TODO; break;
+			case t_cbr_LE: S R(1) C R(2) A L N(cbr_LE, vr1, vr2, label); break;
+			case t_cbr_GT: S R(1) C R(2) A L N(cbr_GT, vr1, vr2, label); break;
+			case t_cbr_GE: S R(1) C R(2) A L N(cbr_GE, vr1, vr2, label); break;
 			case t_cbr_EQ: TODO; break;
 			case t_cbr_NE: TODO; break;
 			

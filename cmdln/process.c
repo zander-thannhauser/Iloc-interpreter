@@ -88,7 +88,7 @@ int process_cmdln(
 	
 	if (!error)
 	{
-		#if defined(SYSTEM_LIBC) && defined(ASM_VERBOSE)
+		#ifdef ASM_VERBOSE
 		setvbuf(stdout, NULL, _IONBF, 0);
 		#endif
 		

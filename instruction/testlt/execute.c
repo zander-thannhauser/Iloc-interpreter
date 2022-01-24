@@ -25,8 +25,8 @@ void testlt_instruction_execute(
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
 		
-		printf("line %4i: %8s %10s  %10s => %-10s", super->line,
-			"testlt", vr1, "", vr2);
+		printf("line %4i: %8s %10s  %10s => %10s  %10s", super->line,
+			"testlt", vr1, "", vr2, "");
 	}
 	#endif
 	

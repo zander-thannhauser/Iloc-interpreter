@@ -1,0 +1,3 @@
+
+extern const struct instruction_inheritance storeAO_instruction_inheritance;
+

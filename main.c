@@ -61,7 +61,6 @@ int main(int argc, char** argv)
 		error = 0;
 	
 	tfree(registers);
-	tfree(parameters);
 	tfree(scope);
 	tfree(flags);
 	

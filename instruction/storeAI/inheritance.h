@@ -1,0 +1,3 @@
+
+extern const struct instruction_inheritance storeAI_instruction_inheritance;
+

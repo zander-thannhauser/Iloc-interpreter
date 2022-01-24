@@ -9,7 +9,7 @@ void usage()
 {
 	ENTER;
 	
-	printf("usage: %s [-dv] -i <input-file>\n", argv0);
+	printf("usage: %s -i <input-file>\n", argv0);
 	
 	EXIT;
 }

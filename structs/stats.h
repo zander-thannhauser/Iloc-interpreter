@@ -4,9 +4,8 @@
 struct stats
 {
 	size_t adds;
-	size_t subtracts;
-	size_t multiplys;
-	size_t divides;
+	size_t subs;
+	size_t mults;
 	
 	size_t comparisons;
 	

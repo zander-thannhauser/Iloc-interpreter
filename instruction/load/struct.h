@@ -7,6 +7,5 @@ struct load_instruction
 	
 	unsigned vr1;
 	unsigned vr2;
-	unsigned vr3;
 };
 

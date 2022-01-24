@@ -26,8 +26,8 @@ void frame_instruction_execute(
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf("line %4u: %8s %10s, %10zu    %10s", super->line,
-			".frame", this->name, this->frame_size, "");
+		printf("line %4u: %8s %10s, %10zu    %10s  %10s", super->line,
+			".frame", this->name, this->frame_size, "", "");
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
 			char vr[10];
