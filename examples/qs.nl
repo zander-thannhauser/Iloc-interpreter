@@ -76,7 +76,7 @@ BEGIN
         quicksort(Z,p,q);
         quicksort(Z,q+1,r)
       END
-END;
+  END;
 BEGIN
   A[0] := 0-1; A[20] :=  1000;  { book does this; don't know why }
   readarray();

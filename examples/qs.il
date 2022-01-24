@@ -240,12 +240,18 @@
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	store	%vr11  => %vr13
+	loadI	-12  => %vr12
+	add	%vr0, %vr12 => %vr13
+	store	%vr6  => %vr13
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	call	quicksort, %vr4, %vr5, %vr13 
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	load	%vr13  => %vr14
+	loadI	-12  => %vr12
+	add	%vr0, %vr12 => %vr13
+	load	%vr13  => %vr6
 	loadI	1  => %vr15
 	add	%vr14, %vr15 => %vr16
 	loadI	-8  => %vr17
@@ -254,3 +260,16 @@
 	call	quicksort, %vr4, %vr18, %vr6 
 .L12:	nop
 	ret
+
+
+
+
+
+
+
+
+
+
+
+
+

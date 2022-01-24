@@ -27,7 +27,12 @@ void iread_instruction_execute(
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		
-		printf("line %4i: %8s %10s\n", super->line, "iread", vr1);
+		printf("line %4i: %8s %10s  %10s    %10s  %10s", super->line,
+			"iread", vr1, "", "", "");
+		
+		rs[this->vr1].kind = vk_ptr;
+		
+		printf(" // (%s = %p)\n", vr1, rs[this->vr1].as_ptr);
 	}
 	#endif
 	
