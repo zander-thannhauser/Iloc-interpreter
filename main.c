@@ -38,6 +38,8 @@ int main(int argc, char** argv)
 	void* stack;
 	ENTER;
 	
+	putchar('\n');
+	
 	error = 0
 		?: process_cmdln(&flags, argc, argv)
 		?: new_scope(&scope)
@@ -48,23 +50,23 @@ int main(int argc, char** argv)
 		?: tcalloc((void**) &registers, nregisters, sizeof(*registers))
 		?: tcalloc((void**) &parameters, nparameters, sizeof(*parameters))
 		?: mmap_stack(&stack)
-		?: init_stack(stack, registers);
+		?: init_stack(stack, registers)
 		 ;
 	
-	if (!error) do
-		execute_instruction(i, &stats, registers, parameters, &i);
-	while (i);
-	
-	if (!error && flags->print_stats)
-		print_stats(&stats);
+	if (!error)
+	{
+		do execute_instruction(i, &stats, registers, parameters, &i);
+		while (i);
+		
+		if (flags->print_stats)
+			print_stats(&stats);
+	}
 	else if (error == e_show_usage)
 		error = 0;
 	
 	// why does this crash sometimes?
-	#if 0
 	tfree(registers);
 	tfree(parameters);
-	#endif
 	tfree(scope);
 	tfree(flags);
 	

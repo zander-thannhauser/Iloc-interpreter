@@ -141,7 +141,7 @@ $(buildprefix)/%.o $(buildprefix)/%.d: %.c | $(buildprefix)/%/
 
 $(buildprefix)/%.o $(buildprefix)/%.d: %.S | $(buildprefix)/%/
 	@ echo "assembling $<"
-	@ $(CC) -c $(CPPFLAGS) $(ASFLAGS) $< -MD -o $(buildprefix)/$*.o $(ON_ERROR)
+	@ $(CC) -c $(CPPFLAGS) $(ASFLAGS) $./examples/dynamic.il< -MD -o $(buildprefix)/$*.o $(ON_ERROR)
 
 $(buildprefix)/interpreter: $(objs)
 	@ echo "linking $@"
