@@ -25,6 +25,7 @@
 // Integer Memory Operations:
 #include <instruction/loadI/new.h>
 #include <instruction/load/new.h>
+#include <instruction/loadAI/new.h>
 #include <instruction/loadAO/new.h>
 #include <instruction/store/new.h>
 #include <instruction/storeAI/new.h>
@@ -141,11 +142,11 @@ int parse_instructions(
 			case t_rshiftI: TODO; break;
 			
 			// Integer Memory Operations
-			case t_loadI:   S IorG A R(1) N(loadI, intlit, isint, vr1); break;
-			case t_load:    S R(1) A R(3) N(load,  vr1, vr3); break;
-			case t_loadAI:  TODO; break;
-			case t_loadAO:  S R(1) C R(2) A R(3)        N(loadAO, vr1, vr2, vr3); break;
-			case t_store:   S R(1)        A R(3)        N(store, vr1, vr3); break;
+			case t_loadI:   S IorG        A R(1)        N(loadI,   intlit, isint, vr1); break;
+			case t_load:    S R(1)        A R(3)        N(load,    vr1, vr3); break;
+			case t_loadAI:  S R(1) C I    A R(3)        N(loadAI,  vr1, intlit, vr3); break;
+			case t_loadAO:  S R(1) C R(2) A R(3)        N(loadAO,  vr1, vr2, vr3); break;
+			case t_store:   S R(1)        A R(3)        N(store,   vr1, vr3); break;
 			case t_storeAI: S R(1)        A R(3) C I    N(storeAI, vr1, vr3, intlit); break;
 			case t_storeAO: S R(1)        A R(2) C R(3) N(storeAO, vr1, vr2, vr3); break;
 			

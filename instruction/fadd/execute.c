@@ -15,14 +15,12 @@ void fadd_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
+	struct fadd_instruction* const this = (typeof(this)) super;
+	
+	#ifdef ASM_VERBOSE
 	char vr1[10];
 	char vr2[10];
 	char vr3[10];
-	struct fadd_instruction* const this = (typeof(this)) super;
-	
-	if (debug)
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		snprintf(vr2, 10, "%%vr%u", this->vr2);
@@ -31,6 +29,7 @@ void fadd_instruction_execute(
 		printf("line %4i: %8s %10s, %10s => %-10s", super->line,
 			"fadd", vr1, vr2, vr3);
 	}
+	#endif
 	
 	float vr1_backup = rs[this->vr1].as_float;
 	float vr2_backup = rs[this->vr2].as_float;
@@ -38,7 +37,7 @@ void fadd_instruction_execute(
 	
 	rs[this->vr3].as_float = vr3_backup;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
 		printf(" // (%s = %gf, %s = %gf, %s = %gf)\n",
 			vr1, vr1_backup,

@@ -60,7 +60,11 @@ int main(int argc, char** argv)
 	else if (error == e_show_usage)
 		error = 0;
 	
+	// why does this crash sometimes?
+	#if 0
 	tfree(registers);
+	tfree(parameters);
+	#endif
 	tfree(scope);
 	tfree(flags);
 	
