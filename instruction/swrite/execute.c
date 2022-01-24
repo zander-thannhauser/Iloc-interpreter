@@ -15,25 +15,23 @@ void swrite_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
-	char vr1[10];
 	struct swrite_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	char vr1[10];
 	{
 		snprintf(vr1, 10, "%%vr%u", this->vr1);
 		
-		printf("line %4i: %8s %10s  %10s    %-10s\n", super->line,
-			"swrite", vr1, "", "");
+		printf("line %4i: %8s %10s  %10s    %10s  %10s\n", super->line,
+			"swrite", vr1, "", "", "");
 	}
+	#endif
 	
 	char* vr_value = rs[this->vr1].as_cptr;
 	
 	puts(vr_value);
 	
 	*next = super->next;
-	#endif
 	
 	stats->total++;
 }

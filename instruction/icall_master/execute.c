@@ -21,12 +21,11 @@ void icall_master_instruction_execute(
 	struct vregister* ps,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
-	size_t i = 0, n = 0;
+	size_t i = 0;
 	struct icall_master_instruction* this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	size_t n = 0;
 	{
 		printf("line %4i: %8s %10p", super->line, "icall", this->callme);
 		
@@ -47,6 +46,7 @@ void icall_master_instruction_execute(
 		
 		printf(")\n");
 	}
+	#endif
 	
 	vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
 		ps[i++] = rs[u];
@@ -54,7 +54,6 @@ void icall_master_instruction_execute(
 	
 	/* push %rip:      */ *rs[1].as_pptr-- = super->next;
 	/* jump to callme: */ *next            = this->callme;
-	#endif
 	
 	stats->total++;
 }

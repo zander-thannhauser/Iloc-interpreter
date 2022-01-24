@@ -15,18 +15,17 @@ void iret_instruction_execute(
 	struct vregister* parameters,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
-	char vr[10];
 	struct iret_instruction* const this = (typeof(this)) super;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	char vr[10];
 	{
 		snprintf(vr, 10, "%%vr%u", this->vr);
 		
 		printf("line %4u: %8s %10s  %10s    %10s",
 			super->line, "iret", vr, "", "");
 	}
+	#endif
 	
 	int vr_backup = rs[this->vr].as_int;
 	
@@ -36,12 +35,14 @@ void iret_instruction_execute(
 	/* pop %rbp:        */  rs[0].as_ptr = *++rs[1].as_pptr;
 	/* jump (pop %rsp):*/  *next         = *++rs[1].as_pptr;
 	
-	if (debug)
+	#ifdef ASM_VERBOSE
+	{
 		printf(" // (%%vr0 = %p, %%vr1 = %p, %s = %i)\n",
 			rs[0].as_ptr, rs[1].as_ptr, vr, vr_backup);
+	}
+	#endif
 	
 	stats->total++;
-	#endif
 }
 
 

@@ -23,6 +23,7 @@
 #include <instruction/multI/new.h>
 
 // Integer Memory Operations:
+#include <instruction/cmp_NE/new.h>
 #include <instruction/loadI/new.h>
 #include <instruction/load/new.h>
 #include <instruction/loadAI/new.h>
@@ -57,9 +58,12 @@
 #include <instruction/ret/new.h>
 #include <instruction/cbr/new.h>
 #include <instruction/cbrne/new.h>
+#include <instruction/cbr_LT/new.h>
 #include <instruction/cbr_LE/new.h>
 #include <instruction/cbr_GT/new.h>
 #include <instruction/cbr_GE/new.h>
+#include <instruction/cbr_EQ/new.h>
+#include <instruction/cbr_NE/new.h>
 
 // Undocumented Instructions:
 #include <instruction/nop/new.h>
@@ -156,7 +160,7 @@ int parse_instructions(
 			case t_cmp_GT: TODO; break;
 			case t_cmp_GE: TODO; break;
 			case t_cmp_EQ: TODO; break;
-			case t_cmp_NE: TODO; break;
+			case t_cmp_NE: S R(1) C R(2) A R(3) N(cmp_NE, vr1, vr2, vr3); break;
 			case t_comp:   S R(1) C R(2) A R(3) N(comp,   vr1, vr2, vr3); break;
 			case t_testeq: S R(1)        A R(3) N(testeq, vr1,      vr3); break;
 			case t_testne: S R(1)        A R(3) N(testne, vr1,      vr3); break;
@@ -194,12 +198,12 @@ int parse_instructions(
 			case t_ret:    S          N(ret); break;
 			case t_cbr:    S R(1) A L N(cbr,   vr1, label); break;
 			case t_cbrne:  S R(1) A L N(cbrne, vr1, label); break;
-			case t_cbr_LT: TODO; break;
+			case t_cbr_LT: S R(1) C R(2) A L N(cbr_LT, vr1, vr2, label); break;
 			case t_cbr_LE: S R(1) C R(2) A L N(cbr_LE, vr1, vr2, label); break;
 			case t_cbr_GT: S R(1) C R(2) A L N(cbr_GT, vr1, vr2, label); break;
 			case t_cbr_GE: S R(1) C R(2) A L N(cbr_GE, vr1, vr2, label); break;
-			case t_cbr_EQ: TODO; break;
-			case t_cbr_NE: TODO; break;
+			case t_cbr_EQ: S R(1) C R(2) A L N(cbr_EQ, vr1, vr2, label); break;
+			case t_cbr_NE: S R(1) C R(2) A L N(cbr_NE, vr1, vr2, label); break;
 			
 			// Undocumented Instructions:
 			case t_nop:    S N(nop); break;

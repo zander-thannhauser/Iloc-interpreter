@@ -17,12 +17,10 @@ void jumpI_instruction_execute(
 {
 	struct jumpI_instruction* const this = (typeof(this)) super;
 	
-	TODO;
-	#if 0
-	if (debug)
+	#ifdef ASM_VERBOSE
 	{
-		printf("line %4i: %8s %10s  %10s -> %-10p\n", super->line,
-			"jumpI", "", "", this->instruction);
+		printf("line %4i: %8s %10s  %10s -> %10p  %10s\n", super->line,
+			"jumpI", "", "", this->instruction, "");
 	}
 	#endif
 	
