@@ -16,7 +16,6 @@
 
 int parse_data(
 	struct tokenizer* t,
-	void* globals,
 	struct scope* scope)
 {
 	int error = 0;
@@ -34,6 +33,9 @@ int parse_data(
 			
 			if (t->token == t_string)
 			{
+				// use malloc not mmap
+				TODO;
+				#if 0
 				error = read_token(t);
 				
 				if (!error && t->token != t_label)
@@ -80,10 +82,14 @@ int parse_data(
 				
 				if (!error)
 					error = read_token(t);
+				#endif
 				
 			}
 			else if (t->token == t_float)
 			{
+				// use malloc not mmap
+				TODO;
+				#if 0
 				error = read_token(t);
 				
 				if (!error && t->token != t_label)
@@ -129,9 +135,14 @@ int parse_data(
 				
 				if (!error)
 					error = read_token(t);
+				#endif
+				
 			}
 			else if (t->token == t_global)
 			{
+				// use malloc not mmap
+				TODO;
+				#if 0
 				size_t size, align;
 				
 				error = read_token(t);
@@ -197,10 +208,13 @@ int parse_data(
 				
 				if (!error)
 					error = read_token(t);
+				#endif
 				
 			}
 			else
+			{
 				keep_going = false;
+			}
 			
 			tfree(label);
 		}

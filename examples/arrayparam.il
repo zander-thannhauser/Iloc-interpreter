@@ -184,11 +184,11 @@
 		load	%vr53  => %vr54
 		iwrite	%vr54
 	ret
-	.frame	inc, 0, %vr420
-		load	%vr420  => %vr5
+	.frame	inc, 0, %vr4
+		load	%vr4  => %vr5
 		loadI	1  => %vr6
 		add	%vr5, %vr6 => %vr7
-		store	%vr7  => %vr420
+		store	%vr7  => %vr4
 	ret
 	
 	
