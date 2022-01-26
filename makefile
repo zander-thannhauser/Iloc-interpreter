@@ -31,7 +31,7 @@ CPPFLAGS += -D 'ddprintf(...)='
 CPPFLAGS += -D TODO='assert(!"TODO")'
 CPPFLAGS += -D CHECK='assert(!"CHECK")'
 
-CFLAGS += -O2 # causes problems?!
+CFLAGS += -O2
 CFLAGS += -flto
 
 LDFLAGS += -flto=auto
