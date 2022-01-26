@@ -8,8 +8,8 @@
 int new_f2i_instruction(
 	struct instruction** new,
 	unsigned line,
-	unsigned vr_src,
-	unsigned vr_dst)
+	unsigned src,
+	unsigned dst)
 {
 	int error = 0;
 	ENTER;
@@ -24,8 +24,8 @@ int new_f2i_instruction(
 	
 	if (!error)
 	{
-		this->vr_src = vr_src;
-		this->vr_dst = vr_dst;
+		this->src = src;
+		this->dst = dst;
 		
 		*new = (struct instruction*) this;
 	}

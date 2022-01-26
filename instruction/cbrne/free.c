@@ -9,7 +9,7 @@ void free_cbrne_instruction(struct instruction* super)
 	struct cbrne_instruction* const this = (typeof(this)) super;
 	ENTER;
 	
-	tfree(this->instruction);
+	tfree(this->label);
 	
 	EXIT;
 }

@@ -4,10 +4,17 @@
 struct instruction;
 struct vregister;
 struct stats;
+struct stack;
 
 struct instruction_inheritance
 {
-	void (*execute)(struct instruction*, struct stats*, struct vregister*, struct vregister*, struct instruction**);
+	void (*execute)(
+		struct instruction* this,
+		struct vregister* ps,
+		struct stack* stack,
+		struct stats* stats,
+		struct instruction** next);
+	
 	void (*free)(struct instruction*);
 };
 

@@ -63,7 +63,7 @@ CPPFLAGS += -D ASM_VERBOSE
 else ifeq ($(asm), quiet)
 CPPFLAGS += -D ASM_QUIET
 else
-$(error "invalid asm_debug option!");
+$(error "invalid asm option!");
 endif
 
 on_error ?= do_nothing
@@ -73,7 +73,7 @@ ON_ERROR =
 else ifeq ($(on_error), open_editor)
 ON_ERROR += || ($$EDITOR $<; false)
 else
-$(error "invalid libc option!");
+$(error "invalid on_error option!");
 endif
 
 buildprefix = gen/$(asm)-asm/$(buildtype)-build
@@ -86,16 +86,26 @@ ARGS += -s
 #ARGS += -i ./examples/test.il
 #ARGS += -i ./examples/external.il
 
-ARGS += -i ./examples/arrayparam.il
+#ARGS += -i ./examples/arrayparam.il
+#ARGS += -i ./examples/arrayparam.oil
 #ARGS += -i ./examples/bubble.il
+#ARGS += -i ./examples/bubble.oil
 #ARGS += -i ./examples/check.il
+#ARGS += -i ./examples/check.oil
 #ARGS += -i ./examples/dynamic.il
+#ARGS += -i ./examples/dynamic.oil
 #ARGS += -i ./examples/fib.il
+#ARGS += -i ./examples/fib.oil
 #ARGS += -i ./examples/gcd.il
+#ARGS += -i ./examples/gcd.oil
 #ARGS += -i ./examples/helloworld.il
+#ARGS += -i ./examples/helloworld.oil
 #ARGS += -i ./examples/newdyn.il
+#ARGS += -i ./examples/newdyn.oil
 #ARGS += -i ./examples/qs.il
+#ARGS += -i ./examples/qs.oil
 #ARGS += -i ./examples/while_array.il
+ARGS += -i ./examples/while_array.oil
 
 run: $(buildprefix)/interpreter
 	$< $(ARGS)

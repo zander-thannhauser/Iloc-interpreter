@@ -3,7 +3,7 @@
 	.float	.float_const_0, 0.01
 	.global	main_fp, 4, 4
 .text
-	.frame	main, 40
+	.frame	main, 44
 		loadI	-4  => %vr5
 		add	%vr0, %vr5 => %vr6
 		loadI	1  => %vr7
@@ -14,7 +14,7 @@
 		loadI	5  => %vr7
 		loadI	6  => %vr7
 	ret
-	.frame	init, 16, %vr8
+	.frame	init, 20, %vr8
 		loadI	9  => %vr4
 		loadI	1  => %vr9
 		loadI	42  => %vr19

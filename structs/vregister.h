@@ -1,8 +1,14 @@
 
+#ifndef STRUCT_VREGISTER_H
+#define STRUCT_VREGISTER_H
+
 struct vregister
 {
 	#ifdef ASM_VERBOSE
 	enum {
+		vk_unset,
+		vk_bol,
+		vk_cmp,
 		vk_int,
 		vk_ptr,
 		vk_flt,
@@ -19,6 +25,9 @@ struct vregister
 		int*   as_iptr;
 		float* as_fptr;
 		char*  as_cptr;
+		
+		struct vregister* as_rptr;
 	};
 };
 
+#endif

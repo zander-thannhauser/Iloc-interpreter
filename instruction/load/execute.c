@@ -4,41 +4,57 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/get_vreg.h>
+
 #include "struct.h"
 #include "execute.h"
 
 void load_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct load_instruction* const this = (typeof(this)) super;
 	
+	struct {
+		#ifdef ASM_VERBOSE
+		char name[10];
+		char value[20];
+		#endif
+		struct vregister* reg;
+	} src, val;
+
+	src.reg = get_vreg(stack, this->src);
+	val.reg = get_vreg(stack, this->val);
+	
 	#ifdef ASM_VERBOSE
-	char vr1[10];
-	char vr2[10];
 	{
-		snprintf(vr1, 10, "%%vr%u", this->vr1);
-		snprintf(vr2, 10, "%%vr%u", this->vr2);
+		snprintf(src.name, 10, "%%vr%u", this->src);
+		snprintf(val.name, 10, "%%vr%u", this->val);
 		
 		printf("line %4i: %8s %10s  %10s => %10s  %10s", super->line,
-			"load", vr1, "", vr2, "");
+			"load", src.name, "", val.name, "");
+		
+		printf(" // (%s = %p, *%s = %i | ",
+			src.name,  src.reg->as_iptr,
+			src.name, *src.reg->as_iptr);
+		
+		fflush(stdout);
+		
+		assert(src.reg->kind == vk_ptr || src.reg->kind == vk_int);
 	}
 	#endif
 	
-	int* vr1_value = rs[this->vr1].as_iptr;
-	int  vr2_value = *vr1_value;
-	
-	rs[this->vr2].as_int = vr2_value;
+	val.reg->as_int = *src.reg->as_iptr;
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%s = %p, *%s = %i, %s = %i)\n",
-			vr1,  vr1_value,
-			vr1, *vr1_value,
-			vr2,  vr2_value);
+		val.reg->kind = vk_int;
+		
+		printf("%s = %i)\n",
+			val.name, val.reg->as_int);
 	}
 	#endif
 	

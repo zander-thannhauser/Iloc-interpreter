@@ -6,6 +6,7 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/get_vreg.h>
 #include <misc/print_vreg.h>
 
 #include "struct.h"
@@ -13,36 +14,49 @@
 
 void sub_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct sub_instruction* const this = (typeof(this)) super;
 	
+	struct {
+		#ifdef ASM_VERBOSE
+		char name[10];
+		char value[20];
+		#endif
+		struct vregister* reg;
+	} vr1, vr2, vr3;
+	
+	vr1.reg = get_vreg(stack, this->vr1);
+	vr2.reg = get_vreg(stack, this->vr2);
+	vr3.reg = get_vreg(stack, this->vr3);
+	
 	#ifdef ASM_VERBOSE
-	char vr1[10];
-	char vr2[10];
-	char vr3[10];
 	{
-		snprintf(vr1, 10, "%%vr%u", this->vr1);
-		snprintf(vr2, 10, "%%vr%u", this->vr2);
-		snprintf(vr3, 10, "%%vr%u", this->vr3);
+		snprintf(vr1.name, 10, "%%vr%u", this->vr1);
+		snprintf(vr2.name, 10, "%%vr%u", this->vr2);
+		snprintf(vr3.name, 10, "%%vr%u", this->vr3);
 		
 		printf("line %4i: %8s %10s, %10s => %10s  %10s", super->line,
-			"sub", vr1, vr2, vr3, "");
+			"sub", vr1.name, vr2.name, vr3.name, "");
+		
+		printf(" // (%s = %s, %s = %s | ",
+			vr1.name, print_vreg(vr1.value, vr1.reg),
+			vr2.name, print_vreg(vr2.value, vr2.reg));
+		
+		fflush(stdout);
 	}
 	#endif
 	
-	rs[this->vr3].as_int = rs[this->vr1].as_int - rs[this->vr2].as_int;
+	vr3.reg->as_int = vr1.reg->as_int - vr2.reg->as_int;
 	
 	#ifdef ASM_VERBOSE
 	{
-		rs[this->vr3].kind = MAX(rs[this->vr1].kind, rs[this->vr2].kind);
+		vr3.reg->kind = MAX(vr1.reg->kind, vr2.reg->kind);
 		
-		printf(" // (%s = %s, ", vr1, print_vreg(&rs[this->vr1]));
-		printf("%s = %s, ", vr2, print_vreg(&rs[this->vr2]));
-		printf("%s = %s)\n", vr3, print_vreg(&rs[this->vr3]));
+		printf("%s = %s)\n", vr3.name, print_vreg(vr3.value, vr3.reg));
 	}
 	#endif
 	

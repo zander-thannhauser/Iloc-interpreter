@@ -8,7 +8,7 @@
 int new_testlt_instruction(
 	struct instruction** new,
 	unsigned line,
-	unsigned vr1, unsigned vr2)
+	unsigned in, unsigned out)
 {
 	int error = 0;
 	ENTER;
@@ -23,8 +23,8 @@ int new_testlt_instruction(
 	
 	if (!error)
 	{
-		this->vr1 = vr1;
-		this->vr2 = vr2;
+		this->in = in;
+		this->out = out;
 		
 		*new = (struct instruction*) this;
 	}

@@ -1,5 +1,5 @@
 
-#include <stdbool.h>
+#include <structs/vregister.h>
 
 #include "../struct.h"
 
@@ -7,8 +7,8 @@ struct loadI_instruction
 {
 	struct instruction super;
 	
-	int intlit;
-	bool isint;
+	struct vregister literal;
+	
 	unsigned vr;
 };
 

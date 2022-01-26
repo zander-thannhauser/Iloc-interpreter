@@ -5,8 +5,7 @@ struct fload_instruction
 {
 	struct instruction super;
 	
-	unsigned vr1;
-	unsigned vr2;
-	unsigned vr3;
+	unsigned src;
+	unsigned dst;
 };
 

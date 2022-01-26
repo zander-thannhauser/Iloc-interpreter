@@ -45,7 +45,7 @@
 	struct instruction;
 	struct instruction_inheritance;
 	struct vregister_ll;
-	
+	struct block;
 	struct vregister;
 	
 #endif

@@ -2,43 +2,65 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include <structs/vregister.h>
+#include <structs/stack.h>
 #include <structs/stats.h>
+
+#include <misc/get_vreg.h>
 
 #include "struct.h"
 #include "execute.h"
 
 void iret_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct iret_instruction* const this = (typeof(this)) super;
 	
+	struct vregister* vr = get_vreg(stack, this->vr);
+	
 	#ifdef ASM_VERBOSE
-	char vr[10];
+	char name[10];
 	{
-		snprintf(vr, 10, "%%vr%u", this->vr);
+		snprintf(name, 10, "%%vr%u", this->vr);
 		
-		printf("line %4u: %8s %10s  %10s    %10s",
-			super->line, "iret", vr, "", "");
+		printf("line %4u: %8s %10s  %10s    %10s  %10s",
+			super->line, "iret", name, "", "", "");
+		
+		printf(" // (%%vr0 = %p, %%vr1 = %p, retval = %i | ",
+			stack->rbp.as_ptr,
+			stack->rsp.as_ptr,
+			vr->as_int);
+		
+		fflush(stdout);
+		
+		assert(stack->rbp.kind == vk_ptr);
+		assert(stack->rsp.kind == vk_ptr);
+		
+		assert(vr->kind == vk_int);
 	}
 	#endif
 	
-	int vr_backup = rs[this->vr].as_int;
+	ps[0].as_int = vr->as_int;
 	
-	parameters[0].as_int = vr_backup;
+	/* movq %rrp, %rsp: */  stack->rsp.as_ptr =    stack->rrp.as_ptr;
+	/* pop %rbp:        */  stack->rbp.as_ptr = *++stack->rsp.as_pptr;
+	/* pop %rrp:        */  stack->rrp.as_ptr = *++stack->rsp.as_pptr;
 	
-	/* movq %rbp, %rsp: */  rs[1].as_ptr =    rs[0].as_ptr;
-	/* pop %rbp:        */  rs[0].as_ptr = *++rs[1].as_pptr;
-	/* jump (pop %rsp):*/  *next         = *++rs[1].as_pptr;
+	/* jump (pop %rsp):*/  *next = *++stack->rsp.as_pptr;
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%%vr0 = %p, %%vr1 = %p, %s = %i)\n",
-			rs[0].as_ptr, rs[1].as_ptr, vr, vr_backup);
+		printf("%%vr0 = %p, %%vr1 = %p",
+			stack->rbp.as_ptr,
+			stack->rsp.as_ptr);
+		
+		if (*next)
+			printf(", line = %u", (*next)->line);
+		
+		printf(")\n");
 	}
 	#endif
 	

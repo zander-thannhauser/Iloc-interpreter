@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <memory/tinc.h>
 
 #include "../new.h"
@@ -11,7 +12,7 @@ int new_cbrne_instruction(
 	struct instruction** new,
 	unsigned line,
 	unsigned vr,
-	struct instruction* instruction)
+	struct block* label)
 {
 	int error = 0;
 	ENTER;
@@ -27,7 +28,7 @@ int new_cbrne_instruction(
 	if (!error)
 	{
 		this->vr = vr;
-		this->instruction = tinc(instruction);
+		this->label = tinc(label);
 		
 		*new = (struct instruction*) this;
 	}

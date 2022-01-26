@@ -23,8 +23,8 @@ int new_testeq_instruction(
 	
 	if (!error)
 	{
-		this->vr1 = vr1;
-		this->vr2 = vr2;
+		this->in = vr1;
+		this->out = vr2;
 		
 		*new = (struct instruction*) this;
 	}

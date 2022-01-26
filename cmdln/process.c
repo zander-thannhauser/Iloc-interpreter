@@ -88,10 +88,6 @@ int process_cmdln(
 	
 	if (!error)
 	{
-		#ifdef ASM_VERBOSE
-		setvbuf(stdout, NULL, _IONBF, 0);
-		#endif
-		
 		flags->in  = in, in = NULL;
 		flags->verbose = verbose;
 		flags->print_stats = print_stats;

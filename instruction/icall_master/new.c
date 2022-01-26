@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <memory/tinc.h>
 
 #include "../new.h"
@@ -10,7 +11,7 @@
 int new_icall_master_instruction(
 	struct instruction** new,
 	unsigned line,
-	struct instruction* callme,
+	struct block* callme,
 	struct vregister_ll* args,
 	unsigned vr)
 {
@@ -28,6 +29,7 @@ int new_icall_master_instruction(
 	if (!error)
 	{
 		this->callme = tinc(callme);
+		
 		this->args = tinc(args);
 		this->vr = vr;
 		

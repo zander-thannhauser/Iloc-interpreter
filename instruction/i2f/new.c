@@ -24,8 +24,8 @@ int new_i2f_instruction(
 	
 	if (!error)
 	{
-		this->vr_src = vr_src;
-		this->vr_dst = vr_dst;
+		this->src = vr_src;
+		this->dst = vr_dst;
 		
 		*new = (struct instruction*) this;
 	}

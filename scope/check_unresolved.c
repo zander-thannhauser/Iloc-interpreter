@@ -7,7 +7,7 @@
 
 #include <enums/error.h>
 
-#include "unresolved/struct.h"
+#include "block/struct.h"
 
 #include "struct.h"
 #include "check_unresolved.h"
@@ -20,7 +20,7 @@ int scope_check_unresolved(struct scope* this)
 	
 	for (node = this->unresolved->head; node; node = node->next)
 	{
-		struct unresolved* u = node->item;
+		struct block* u = node->item;
 		
 		fprintf(stderr, "%s: unresolved reference to '%s'!\n", argv0, u->name);
 		

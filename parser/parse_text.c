@@ -10,8 +10,7 @@
 int parse_text(
 	struct tokenizer* t,
 	struct scope* s,
-	size_t* out_nregisters,
-	size_t* out_nparameters)
+	size_t* out_ns)
 {
 	int error = 0;
 	ENTER;
@@ -22,7 +21,7 @@ int parse_text(
 		
 		while (!error && t->token == t_frame)
 		{
-			error = parse_frame(t, s, out_nparameters);
+			error = parse_frame(t, s, out_ns);
 		}
 	}
 	

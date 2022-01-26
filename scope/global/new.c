@@ -26,7 +26,7 @@ int new_global(
 	if (!error)
 	{
 		this->name = tinc(name);
-		this->value = value;
+		this->value = tinc(value);
 		
 		*new = this;
 	}

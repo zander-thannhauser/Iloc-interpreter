@@ -9,7 +9,7 @@ void free_cbr_EQ_instruction(struct instruction* super)
 	struct cbr_EQ_instruction* const this = (typeof(this)) super;
 	ENTER;
 	
-	tfree(this->instruction);
+	tfree(this->label);
 	
 	EXIT;
 }

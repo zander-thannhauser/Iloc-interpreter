@@ -1,9 +1,13 @@
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <scope/block/struct.h>
+
+#include <misc/get_vreg.h>
 #include <misc/print_vreg.h>
 
 #include "struct.h"
@@ -11,36 +15,50 @@
 
 void cbr_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct cbr_instruction* const this = (typeof(this)) super;
 	
+	struct vregister* conditional = get_vreg(stack, this->vr);
+	
 	#ifdef ASM_VERBOSE
-	char vr[10];
+	char name[10], value[10];
 	{
-		snprintf(vr, 10, "%%vr%u", this->vr);
+		snprintf(name, 10, "%%vr%u", this->vr);
 		
-		printf("line %4i: %8s %10s  %10s -> %10p  %10s", super->line,
-			"cbr", vr, "", this->instruction, "");
+		printf("line %4i: %8s %10s  %10s -> %10s  %10s", super->line,
+			"cbr", name, "", this->label->name, "");
+		
+		printf(" // (%s = %s | ", name, print_vreg(value, conditional));
 	}
 	#endif
 	
-	int vr_value = rs[this->vr].as_int;
+	bool vr_value = conditional->as_int;
 	
-	*next = vr_value ? this->instruction : super->next;
+	*next = vr_value ? this->label->instruction : super->next;
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%s = %s, ", vr, print_vreg(&rs[this->vr]));
-		printf("%s = %p)\n", "%rip", *next);
+		printf("%s = %u)\n", "line", (*next)->line);
 	}
 	#endif
 	
 	stats->total++;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

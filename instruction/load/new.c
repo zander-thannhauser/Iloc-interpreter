@@ -8,7 +8,7 @@
 int new_load_instruction(
 	struct instruction** new,
 	unsigned line,
-	unsigned vr1, unsigned vr2)
+	unsigned src, unsigned val)
 {
 	int error = 0;
 	ENTER;
@@ -23,8 +23,8 @@ int new_load_instruction(
 	
 	if (!error)
 	{
-		this->vr1 = vr1;
-		this->vr2 = vr2;
+		this->src = src;
+		this->val = val;
 		
 		*new = (struct instruction*) this;
 	}

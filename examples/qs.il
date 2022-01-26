@@ -13,7 +13,7 @@
 	.float	.float_const_0, 1.7
 	.global	main_fp, 4, 4
 	.text
-	.frame	main, 920
+	.frame	main, 96
 	loadI	main_fp  => %vr4
 	store	%vr0  => %vr4
 	loadI	0  => %vr5
@@ -55,7 +55,7 @@
 	call	quicksort, %vr20, %vr22, %vr25 
 	call	writearray 
 	ret
-	.frame	readarray, 10
+	.frame	readarray, 14
 	loadI	.string_const_0  => %vr5
 	swrite	%vr5
 	loadI	1  => %vr6
@@ -85,7 +85,7 @@
 	cbr	%vr9  -> .L1
 .L0:	nop
 	ret
-	.frame	writearray, 10
+	.frame	writearray, 0
 	loadI	.string_const_1  => %vr5
 	swrite	%vr5
 	loadI	1  => %vr6
@@ -115,7 +115,7 @@
 	cbr	%vr9  -> .L3
 .L2:	nop
 	ret
-	.frame	partition, 10, %vr4, %vr5, %vr6
+	.frame	partition, 0, %vr4, %vr5, %vr6
 	load	%vr5  => %vr12
 	loadI	0  => %vr13
 	sub	%vr12, %vr13 => %vr14
@@ -230,7 +230,7 @@
 	cbr	%vr25  -> .L5
 .L4:	nop
 	ret
-	.frame	quicksort, 80, %vr4, %vr5, %vr6
+	.frame	quicksort, 12, %vr4, %vr5, %vr6
 	load	%vr5  => %vr7
 	load	%vr6  => %vr8
 	comp	%vr7, %vr8 => %vr9
@@ -240,18 +240,12 @@
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	store	%vr11  => %vr13
-	loadI	-12  => %vr12
-	add	%vr0, %vr12 => %vr13
-	store	%vr6  => %vr13
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	call	quicksort, %vr4, %vr5, %vr13 
 	loadI	-4  => %vr12
 	add	%vr0, %vr12 => %vr13
 	load	%vr13  => %vr14
-	loadI	-12  => %vr12
-	add	%vr0, %vr12 => %vr13
-	load	%vr13  => %vr6
 	loadI	1  => %vr15
 	add	%vr14, %vr15 => %vr16
 	loadI	-8  => %vr17
@@ -260,16 +254,3 @@
 	call	quicksort, %vr4, %vr18, %vr6 
 .L12:	nop
 	ret
-
-
-
-
-
-
-
-
-
-
-
-
-

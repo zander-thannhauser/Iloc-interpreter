@@ -1,0 +1,67 @@
+.data
+	   .string     .int_wformat, "%d\12"
+	   .string   .float_wformat, "%f\12"
+	   .string    .char_wformat, "%c\12"
+	   .string  .string_wformat, "%s\12"
+	   .string     .int_rformat, "%d"
+	   .string   .float_rformat, "%f"
+	   .string    .char_rformat, "%c"
+	   .string  .string_rformat, "%s"
+	   .global          main_fp, 4, 4
+.text
+	.frame main, 12
+	  loadI main_fp => %vr4
+	  store %vr0 => %vr4
+	# loadI -4 => %vr5
+	  addI %vr0, -4 => %vr6
+	  iread %vr6
+	# loadI -8 => %vr7
+	  addI %vr0, -8 => %vr8
+	  iread %vr8
+	  loadAI %vr0, -4 => %vr9
+	# loadI 0 => %vr10
+	# comp %vr9, %vr10 => %vr11
+	  loadAI %vr0, -8 => %vr12
+	# comp %vr12, %vr10 => %vr13
+	  or %vr9, %vr12 => %vr14
+	# comp %vr14, %vr10 => %vr15
+	# not %vr14 => %vr16
+	  cbrne %vr14 -> .L0
+	.L1:
+	# loadI -4 => %vr17
+	  addI %vr0, -4 => %vr18
+	# loadI -8 => %vr19
+	  addI %vr0, -8 => %vr20
+	  icall gcd, %vr18, %vr20 => %vr21
+	  iwrite %vr21
+	  iread %vr18
+	  iread %vr20
+	  loadAI %vr0, -4 => %vr22
+	# loadI 0 => %vr23
+	# comp %vr22, %vr23 => %vr24
+	  loadAI %vr0, -8 => %vr25
+	# comp %vr25, %vr23 => %vr26
+	  or %vr22, %vr25 => %vr27
+	  cbr %vr27 -> .L1
+	.L0:
+	  ret
+	.frame gcd, 8, %vr4, %vr5
+	  load %vr5 => %vr6
+	# loadI 0 => %vr7
+	# comp %vr6, %vr7 => %vr8
+	# not %vr6 => %vr9
+	  cbr %vr6 -> .L2
+	  load %vr4 => %vr10
+	  iret %vr10
+	  jumpI -> .L3
+	.L2:
+	  load %vr4 => %vr11
+	  load %vr5 => %vr12
+	  mod %vr11, %vr12 => %vr13
+	# loadI -4 => %vr14
+	  addI %vr0, -4 => %vr15
+	  storeAI %vr13 => %vr0, -4
+	  icall gcd, %vr5, %vr15 => %vr16
+	  iret %vr16
+	.L3:
+	  ret

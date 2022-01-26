@@ -1,0 +1,137 @@
+.data
+	   .string     .int_wformat, "%d\12"
+	   .string   .float_wformat, "%f\12"
+	   .string    .char_wformat, "%c\12"
+	   .string  .string_wformat, "%s\12"
+	   .string     .int_rformat, "%d"
+	   .string   .float_rformat, "%f"
+	   .string    .char_rformat, "%c"
+	   .string  .string_rformat, "%s"
+	    .float   .float_const_0, 0.01
+	   .global          main_fp, 4, 4
+.text
+	.frame main, 44
+	  loadI main_fp => %vr4
+	  store %vr0 => %vr4
+	# loadI -4 => %vr5
+	  addI %vr0, -4 => %vr6
+	  call init, %vr6
+	  call writearray, %vr6
+	# loadI 1 => %vr7
+	  loadI 1 => %vr8
+	# loadI 10 => %vr9
+	# loadI -1 => %vr10
+	# loadI 0 => %vr11
+	.L1:
+	  i2i %vr0 => %vr12
+	# loadI -4 => %vr13
+	# addI %vr0, -4 => %vr14
+	# loadI 1 => %vr15
+	# addI %vr8, -1 => %vr16
+	# loadI 4 => %vr17
+	  multI %vr8, 4 => %vr18
+	# addI %vr18, -4 => %vr19
+	  sub %vr0, %vr18 => %vr20
+	  multI %vr8, -4 => %vr22
+	  loadAO %vr0, %vr22 => %vr21
+	  mult %vr21, %vr8 => %vr23
+	  storeAO %vr23 => %vr0, %vr22
+	  call inc, %vr20
+	  addI %vr8, 1 => %vr24
+	  addI %vr8, 1 => %vr8
+	  loadI 10 => %vr25
+	# comp %vr24, %vr25 => %vr26
+	# cmp_LE %vr24, %vr25 => %vr27
+	  cbr_LE %vr24, %vr25 -> .L1
+	.L0:
+	# loadI -4 => %vr28
+	  addI %vr0, -4 => %vr29
+	  call writearray, %vr29
+	  ret
+	.frame init, 0, %vr4
+	# loadI 1 => %vr5
+	  loadI 1 => %vr6
+	# loadI 10 => %vr7
+	  loadI 10 => %vr8
+	# loadI -1 => %vr9
+	# loadI 0 => %vr10
+	.L3:
+	  i2f %vr6 => %vr11
+	  loadI .float_const_0 => %vr12
+	  fload %vr12 => %vr13
+	  fmult %vr11, %vr13 => %vr14
+	  i2f %vr8 => %vr15
+	  fadd %vr14, %vr15 => %vr16
+	  f2i %vr16 => %vr17
+	# loadI 1 => %vr18
+	# addI %vr6, -1 => %vr19
+	# loadI 4 => %vr20
+	  multI %vr6, 4 => %vr21
+	  addI %vr21, -4 => %vr22
+	  sub %vr4, %vr22 => %vr23
+	  store %vr17 => %vr23
+	  addI %vr6, 1 => %vr24
+	  addI %vr6, 1 => %vr6
+	# addI %vr8, 1 => %vr25
+	  addI %vr8, 1 => %vr8
+	  loadI 10 => %vr26
+	# comp %vr24, %vr26 => %vr27
+	# cmp_LE %vr24, %vr26 => %vr28
+	  cbr_LE %vr24, %vr26 -> .L3
+	.L2:
+	  ret
+	.frame writearray, 0, %vr4
+	# loadI 1 => %vr5
+	# loadI 0 => %vr6
+	# loadI 4 => %vr7
+	  load %vr4 => %vr8
+	  iwrite %vr8
+	# loadI 2 => %vr9
+	# addI %vr4, -4 => %vr10
+	  loadAI %vr4, -4 => %vr11
+	  iwrite %vr11
+	# loadI 3 => %vr12
+	# loadI 8 => %vr13
+	# addI %vr4, -8 => %vr14
+	  loadAI %vr4, -8 => %vr15
+	  iwrite %vr15
+	# loadI 12 => %vr16
+	# addI %vr4, -12 => %vr17
+	  loadAI %vr4, -12 => %vr18
+	  iwrite %vr18
+	# loadI 5 => %vr19
+	# loadI 16 => %vr20
+	# addI %vr4, -16 => %vr21
+	  loadAI %vr4, -16 => %vr22
+	  iwrite %vr22
+	# loadI 6 => %vr23
+	# loadI 20 => %vr24
+	# addI %vr4, -20 => %vr25
+	  loadAI %vr4, -20 => %vr26
+	  iwrite %vr26
+	# loadI 7 => %vr27
+	# loadI 24 => %vr28
+	# addI %vr4, -24 => %vr29
+	  loadAI %vr4, -24 => %vr30
+	  iwrite %vr30
+	# loadI 28 => %vr31
+	# addI %vr4, -28 => %vr32
+	  loadAI %vr4, -28 => %vr33
+	  iwrite %vr33
+	# loadI 9 => %vr34
+	# loadI 32 => %vr35
+	# addI %vr4, -32 => %vr36
+	  loadAI %vr4, -32 => %vr37
+	  iwrite %vr37
+	# loadI 10 => %vr38
+	# loadI 36 => %vr39
+	# addI %vr4, -36 => %vr40
+	  loadAI %vr4, -36 => %vr41
+	  iwrite %vr41
+	  ret
+	.frame inc, 0, %vr4
+	  load %vr4 => %vr5
+	# loadI 1 => %vr6
+	  addI %vr5, 1 => %vr7
+	  store %vr7 => %vr4
+	  ret

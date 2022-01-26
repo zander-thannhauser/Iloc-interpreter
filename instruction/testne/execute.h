@@ -1,13 +1,12 @@
 
-#include <stdbool.h>
-
 struct instruction;
 struct vregister;
 struct stats;
+struct stack;
 
 void testne_instruction_execute(
-	struct instruction* super,
+	struct instruction* this,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* registers,
-	struct vregister* parameters,
 	struct instruction** next);

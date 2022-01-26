@@ -8,7 +8,7 @@
 int new_storeAO_instruction(
 	struct instruction** new,
 	unsigned line,
-	unsigned vr1, unsigned vr2, unsigned vr3)
+	unsigned val, unsigned dst, unsigned off)
 {
 	int error = 0;
 	ENTER;
@@ -23,9 +23,9 @@ int new_storeAO_instruction(
 	
 	if (!error)
 	{
-		this->vr1 = vr1;
-		this->vr2 = vr2;
-		this->vr3 = vr3;
+		this->val = val;
+		this->dst = dst;
+		this->off = off;
 		
 		*new = (struct instruction*) this;
 	}

@@ -7,10 +7,10 @@
 
 #include <avl/avl.h>
 
-#include <instruction/struct.h>
+/*#include <instruction/struct.h>*/
 
+#include "block/struct.h"
 #include "block/new.h"
-#include "unresolved/struct.h"
 
 #include "struct.h"
 #include "declare_block.h"
@@ -25,15 +25,19 @@ int scope_declare_block(
 	struct avl_node_t* node;
 	ENTER;
 	
-	error = new_block(&block, label, instruction);
-	
-	if (!error && (node = avl_search(this->unresolved, &label)))
+	if ((node = avl_search(this->unresolved, &label)))
 	{
-		struct unresolved* u = node->item;
-		u->instruction->next = tinc(instruction);
+		block = tinc(node->item);
+		
+		block->instruction = tinc(instruction);
+		
 		avl_delete_node(this->unresolved, node);
 	}
-		
+	else
+	{
+		error = new_block(&block, label, instruction);
+	}
+	
 	if (!error && !avl_insert(this->blocks, block))
 	{
 		TODO;

@@ -1,0 +1,37 @@
+.data
+	   .string     .int_wformat, "%d\12"
+	   .string   .float_wformat, "%f\12"
+	   .string    .char_wformat, "%c\12"
+	   .string  .string_wformat, "%s\12"
+	   .string     .int_rformat, "%d"
+	   .string   .float_rformat, "%f"
+	   .string    .char_rformat, "%c"
+	   .string  .string_rformat, "%s"
+	   .string  .string_const_0, "SUCCESS"
+.text
+	.frame main, 0
+	# loadI 1 => %vr4
+	  loadI 1 => %vr5
+	# loadI 10 => %vr6
+	# loadI -1 => %vr7
+	# loadI 0 => %vr8
+	.L1:
+	  loadI 0 => %vr9
+	# comp %vr5, %vr9 => %vr10
+	# cmp_LT %vr5, %vr9 => %vr11
+	  cbr_GE %vr5, %vr9 -> .L2
+	  loadI 10 => %vr12
+	# mod %vr12, %vr9 => %vr13
+	  mod %vr12, %vr9 => %vr14
+	.L2:
+	# loadI 1 => %vr15
+	  addI %vr5, 1 => %vr16
+	  addI %vr5, 1 => %vr5
+	  loadI 10 => %vr17
+	# comp %vr16, %vr17 => %vr18
+	# cmp_LE %vr16, %vr17 => %vr19
+	  cbr_LE %vr16, %vr17 -> .L1
+	.L0:
+	  loadI .string_const_0 => %vr20
+	  swrite %vr20
+	  ret

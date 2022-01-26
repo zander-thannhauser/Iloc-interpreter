@@ -9,9 +9,9 @@
 
 void nop_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* registers,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	#ifdef ASM_VERBOSE

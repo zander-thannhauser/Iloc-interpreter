@@ -4,6 +4,7 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/get_vreg.h>
 #include <misc/print_vreg.h>
 
 #include "struct.h"
@@ -11,37 +12,33 @@
 
 void loadI_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct loadI_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
 	char vr[10];
-	char lit[20];
-	{
-		snprintf(vr, 10, "%%vr%u", this->vr);
-		
-		if (this->isint)
-			sprintf(lit, "%i", this->intlit);
-		else
-			sprintf(lit, "%p", (void*) this->intlit);
-		
-		printf("line %4i: %8s %10s  %10s => %10s  %10s",
-			super->line, "loadI", lit, "", vr, "");
-	}
+	char value[20];
+	
+	snprintf(vr, 10, "%%vr%u", this->vr);
+	
+	print_vreg(value, &this->literal);
+	
+	printf("line %4i: %8s %10s  %10s => %10s  %10s",
+		super->line, "loadI", value, "", vr, "");
+	
+	fflush(stdout);
 	#endif
 	
-	rs[this->vr].as_int = this->intlit;
+	struct vregister* dst = get_vreg(stack, this->vr);
+	
+	*dst = this->literal;
 	
 	#ifdef ASM_VERBOSE
-	{
-		rs[this->vr].kind = this->isint ? vk_int : vk_ptr;
-		
-		printf(" // (%%vr%u = %s)\n", this->vr, print_vreg(&rs[this->vr]));
-	}
+	printf(" // (%%vr%u = %s)\n", this->vr, value);
 	#endif
 	
 	*next = super->next;

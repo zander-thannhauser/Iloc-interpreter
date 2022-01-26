@@ -9,6 +9,7 @@
 #include <scope/declare_block.h>
 
 #include <instruction/struct.h>
+#include <instruction/frame/struct.h>
 #include <instruction/frame/new.h>
 
 #include <misc/vregister_ll/struct.h>
@@ -24,7 +25,7 @@
 int parse_frame(
 	struct tokenizer* t,
 	struct scope* s,
-	size_t* out_nparameters)
+	size_t* out_nps)
 {
 	int error = 0;
 	char* funcname = NULL;
@@ -36,6 +37,8 @@ int parse_frame(
 	assert(t->token == t_frame);
 	
 	unsigned line = t->token_line;
+	
+	t->max_vreg = 4;
 	
 	error = 0
 		?: read_token(t)
@@ -49,10 +52,9 @@ int parse_frame(
 		?: new_vregister_ll(&args);
 		 ;
 	
+	unsigned vr;
 	while (!error && t->token == t_comma)
 	{
-		unsigned vr;
-		
 		error = 0
 			?: read_token(t)
 			?: (t->token != t_vregister ? e_syntax_error : 0)
@@ -62,13 +64,13 @@ int parse_frame(
 	
 	if (!error)
 	{
-		if (args->n > *out_nparameters)
-			*out_nparameters = args->n;
+		if (args->n > *out_nps)
+			*out_nps = args->n;
 		
 		error = 0
 			?: new_frame_instruction(&frame, line, funcname, frame_size, args)
 			?: scope_declare_block(s, funcname, frame)
-			?: (next = frame, parse_instructions(t, s, out_nparameters, &next))
+			?: (next = frame, parse_instructions(t, s, out_nps, &next))
 			 ;
 	}
 	
@@ -84,13 +86,14 @@ int parse_frame(
 			?: read_token(t)
 			?: (t->token == t_colon ? 0 : e_syntax_error)
 			?: read_token(t)
-			?: parse_instructions(t, s, out_nparameters, &next)
+			?: parse_instructions(t, s, out_nps, &next)
 			?: scope_declare_block(s, label, old_next->next)
 			 ;
 		
 		tfree(label);
 	}
 	
+	((struct frame_instruction*) frame)->nregs = t->max_vreg + 1;
 	
 	tfree(frame);
 	tfree(funcname);

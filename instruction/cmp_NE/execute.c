@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stdio.h>
 
 #include <structs/vregister.h>
@@ -11,11 +12,13 @@
 
 void cmp_NE_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	struct cmp_NE_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
@@ -49,6 +52,7 @@ void cmp_NE_instruction_execute(
 	#endif
 	
 	*next = super->next;
+	#endif
 	
 	stats->comparisons++;
 	stats->total++;

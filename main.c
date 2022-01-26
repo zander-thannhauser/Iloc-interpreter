@@ -5,12 +5,13 @@
 #include <memory/tfree.h>
 
 #include <structs/stats.h>
-#include <structs/vregister.h>
+#include <structs/stack.h>
 
 #include <cmdln/flags.h>
 #include <cmdln/process.h>
 
 #include <scope/new.h>
+#include <scope/block/struct.h>
 #include <scope/lookup_block.h>
 #include <scope/check_unresolved.h>
 
@@ -26,57 +27,39 @@
 int main(int argc, char** argv)
 {
 	int error = 0;
+	size_t nps = 0;
 	struct cmdln_flags* flags = NULL;
 	struct scope* scope = NULL;
-	size_t nparameters = 0;
-	struct vregister* rbp, *rsp;
-	struct vregister* parameters = NULL;
-	struct instruction* i;
+	struct vregister* ps = NULL;
+	struct block* b;
 	struct stats stats = {};
-	void* stack;
+	struct stack stack = {};
 	ENTER;
-	
-/*	putchar('\n');*/
 	
 	error = 0
 		?: process_cmdln(&flags, argc, argv)
 		?: new_scope(&scope)
-		?: parse(flags->in, scope, globals, &nparameters)
-		?: scope_lookup_block(scope, "main", &i)
+		?: parse(flags->in, scope, &nps)
+		?: scope_lookup_block(scope, "main", &b)
 		?: scope_check_unresolved(scope)
-		?: tcalloc((void**) &parameters, nparameters, sizeof(*parameters))
-		?: mmap_stack(&registers)
-		?: mmap_stack(&stack)
-/*		?: init_stack(stack, registers)*/
+		?: tcalloc((void**) &ps, nps, sizeof(*ps))
+		?: mmap_stack(&stack.rsp.as_ptr)
 		 ;
 	
 	if (!error)
 	{
-		TODO;
-		#if 0
-		
 		#ifdef ASM_VERBOSE
-		rs[0].kind   = vk_ptr;
-		rs[1].kind   = vk_ptr;
+		stack.rrp.kind = vk_ptr;
+		stack.rbp.kind = vk_ptr;
+		stack.rsp.kind = vk_ptr;
 		#endif
-		
-		// set %rsp:
-		{
-			rs[1].as_ptr = stack;
-		}
 		
 		// the caller needs to push %rip:
-		{
-			*rs[1].as_pptr-- = NULL;
-		}
-	
-		#endif
+		*stack.rsp.as_pptr-- = NULL;
 		
-		// set up register {stack,base} pointer
-		TODO;
+		struct instruction* i = b->instruction;
 		
-		do execute_instruction(i, &stats, &rbp, &rsp, parameters, &i);
-		while (i);
+		do execute_instruction(i, ps, &stack, &stats, &i); while (i);
 		
 		if (flags->print_stats)
 			print_stats(&stats);
@@ -85,8 +68,7 @@ int main(int argc, char** argv)
 	if (error == e_show_usage)
 		error = 0;
 	
-	tfree(registers);
-	tfree(parameters);
+	tfree(ps);
 	tfree(scope);
 	tfree(flags);
 	

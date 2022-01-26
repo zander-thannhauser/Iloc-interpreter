@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <memory/tinc.h>
 
 #include "../new.h"
@@ -10,7 +11,7 @@
 int new_jumpI_instruction(
 	struct instruction** new,
 	unsigned line,
-	struct instruction* instruction)
+	struct block* label)
 {
 	int error = 0;
 	ENTER;
@@ -25,7 +26,7 @@ int new_jumpI_instruction(
 	
 	if (!error)
 	{
-		this->instruction = tinc(instruction);
+		this->label = tinc(label);
 		
 		*new = (struct instruction*) this;
 	}

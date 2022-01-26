@@ -9,7 +9,7 @@ void free_jumpI_instruction(struct instruction* super)
 	struct jumpI_instruction* const this = (typeof(this)) super;
 	ENTER;
 	
-	tfree(this->instruction);
+	tfree(this->label);
 	
 	EXIT;
 }

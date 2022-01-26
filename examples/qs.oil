@@ -1,0 +1,218 @@
+.data
+	   .string     .int_wformat, "%d\12"
+	   .string   .float_wformat, "%f\12"
+	   .string    .char_wformat, "%c\12"
+	   .string  .string_wformat, "%s\12"
+	   .string     .int_rformat, "%d"
+	   .string   .float_rformat, "%f"
+	   .string    .char_rformat, "%c"
+	   .string  .string_rformat, "%s"
+	   .string  .string_const_0, "A?"
+	   .string  .string_const_1, "A:"
+	    .float   .float_const_0, 1.7
+	   .global          main_fp, 4, 4
+.text
+	.frame main, 96
+	  loadI main_fp => %vr4
+	  store %vr0 => %vr4
+	# loadI 0 => %vr5
+	  loadI 1 => %vr6
+	  loadI -1 => %vr7
+	  i2i %vr0 => %vr8
+	# loadI -4 => %vr9
+	  addI %vr0, -4 => %vr10
+	# loadI 4 => %vr11
+	  storeAI %vr7 => %vr0, -4
+	  loadI 1000 => %vr12
+	# loadI 20 => %vr13
+	# loadI 80 => %vr14
+	# addI %vr0, -84 => %vr15
+	  storeAI %vr12 => %vr0, -84
+	  call readarray
+	  call writearray
+	# loadI -88 => %vr16
+	  addI %vr0, -88 => %vr17
+	  storeAI %vr6 => %vr0, -88
+	  loadI 19 => %vr18
+	# loadI -92 => %vr19
+	  addI %vr0, -92 => %vr20
+	  storeAI %vr18 => %vr0, -92
+	  call quicksort, %vr10, %vr17, %vr20
+	  call writearray
+	  ret
+	.frame readarray, 14
+	  loadI .string_const_0 => %vr4
+	  swrite %vr4
+	# loadI 1 => %vr5
+	  loadI 1 => %vr6
+	# loadI 20 => %vr7
+	# loadI -1 => %vr8
+	# loadI 0 => %vr9
+	.L1:
+	  iwrite %vr6
+	  loadI main_fp => %vr10
+	  load %vr10 => %vr11
+	# loadI -4 => %vr12
+	  addI %vr11, -4 => %vr13
+	# loadI 0 => %vr14
+	# loadI 4 => %vr15
+	  multI %vr6, 4 => %vr16
+	  sub %vr13, %vr16 => %vr17
+	  iread %vr17
+	# loadI 1 => %vr18
+	  addI %vr6, 1 => %vr19
+	  addI %vr6, 1 => %vr6
+	  loadI 20 => %vr20
+	# comp %vr19, %vr20 => %vr21
+	# cmp_LT %vr19, %vr20 => %vr22
+	  cbr_LT %vr19, %vr20 -> .L1
+	.L0:
+	  ret
+	.frame writearray, 0
+	  loadI .string_const_1 => %vr4
+	  swrite %vr4
+	# loadI 1 => %vr5
+	  loadI 1 => %vr6
+	# loadI 20 => %vr7
+	# loadI -1 => %vr8
+	# loadI 0 => %vr9
+	.L3:
+	  loadI main_fp => %vr10
+	  load %vr10 => %vr11
+	# loadI -4 => %vr12
+	  addI %vr11, -4 => %vr13
+	# loadI 0 => %vr14
+	# loadI 4 => %vr15
+	# multI %vr6, 4 => %vr16
+	# sub %vr13, %vr16 => %vr17
+	  multI %vr6, -4 => %vr19
+	  loadAO %vr13, %vr19 => %vr18
+	  iwrite %vr18
+	# loadI 1 => %vr20
+	  addI %vr6, 1 => %vr21
+	  addI %vr6, 1 => %vr6
+	  loadI 20 => %vr22
+	# comp %vr21, %vr22 => %vr23
+	# cmp_LT %vr21, %vr22 => %vr24
+	  cbr_LT %vr21, %vr22 -> .L3
+	.L2:
+	  ret
+	.frame partition, 0, %vr4, %vr5, %vr6
+	  load %vr5 => %vr7
+	# loadI 0 => %vr8
+	# loadI 4 => %vr9
+	# multI %vr7, 4 => %vr10
+	# sub %vr4, %vr10 => %vr11
+	  multI %vr7, -4 => %vr13
+	  loadAO %vr4, %vr13 => %vr12
+	  i2i %vr12 => %vr14
+	# loadI 1 => %vr15
+	# addI %vr7, -1 => %vr16
+	  addI %vr7, -1 => %vr17
+	  load %vr6 => %vr18
+	# addI %vr18, 1 => %vr19
+	  addI %vr18, 1 => %vr20
+	  loadI .float_const_0 => %vr21
+	  fload %vr21 => %vr22
+	  f2i %vr22 => %vr23
+	# comp %vr23, %vr8 => %vr24
+	# not %vr23 => %vr25
+	  cbrne %vr23 -> .L4
+	.L5:
+	# loadI 1 => %vr26
+	  addI %vr20, -1 => %vr27
+	  addI %vr20, -1 => %vr20
+	# loadI 0 => %vr28
+	# loadI 4 => %vr29
+	# multI %vr27, 4 => %vr30
+	# sub %vr4, %vr30 => %vr31
+	  multI %vr27, -4 => %vr33
+	  loadAO %vr4, %vr33 => %vr32
+	# comp %vr32, %vr14 => %vr34
+	# cmp_LE %vr32, %vr14 => %vr35
+	  cbr_LE %vr32, %vr14 -> .L6
+	.L7:
+	# loadI 1 => %vr36
+	  addI %vr20, -1 => %vr37
+	  addI %vr20, -1 => %vr20
+	# loadI 0 => %vr38
+	# loadI 4 => %vr39
+	# multI %vr37, 4 => %vr40
+	# sub %vr4, %vr40 => %vr41
+	  multI %vr37, -4 => %vr43
+	  loadAO %vr4, %vr43 => %vr42
+	# comp %vr42, %vr14 => %vr44
+	# cmp_GT %vr42, %vr14 => %vr45
+	  cbr_GT %vr42, %vr14 -> .L7
+	.L6:
+	# loadI 1 => %vr46
+	  addI %vr17, 1 => %vr47
+	  addI %vr17, 1 => %vr17
+	# loadI 0 => %vr48
+	# loadI 4 => %vr49
+	# multI %vr47, 4 => %vr50
+	# sub %vr4, %vr50 => %vr51
+	  multI %vr47, -4 => %vr53
+	  loadAO %vr4, %vr53 => %vr52
+	# comp %vr52, %vr14 => %vr54
+	# cmp_GE %vr52, %vr14 => %vr55
+	  cbr_GE %vr52, %vr14 -> .L8
+	.L9:
+	# loadI 1 => %vr56
+	  addI %vr17, 1 => %vr57
+	  addI %vr17, 1 => %vr17
+	# loadI 0 => %vr58
+	# loadI 4 => %vr59
+	# multI %vr57, 4 => %vr60
+	# sub %vr4, %vr60 => %vr61
+	  multI %vr57, -4 => %vr63
+	  loadAO %vr4, %vr63 => %vr62
+	# comp %vr62, %vr14 => %vr64
+	# cmp_LT %vr62, %vr14 => %vr65
+	  cbr_LT %vr62, %vr14 -> .L9
+	.L8:
+	# comp %vr17, %vr20 => %vr66
+	# cmp_LT %vr17, %vr20 => %vr67
+	  cbr_GE %vr17, %vr20 -> .L10
+	# loadI 0 => %vr68
+	# loadI 4 => %vr69
+	# multI %vr17, 4 => %vr70
+	# sub %vr4, %vr70 => %vr71
+	  multI %vr17, -4 => %vr73
+	  loadAO %vr4, %vr73 => %vr72
+	  i2i %vr72 => %vr74
+	# multI %vr20, 4 => %vr75
+	# sub %vr4, %vr75 => %vr76
+	  multI %vr20, -4 => %vr78
+	  loadAO %vr4, %vr78 => %vr77
+	  storeAO %vr77 => %vr4, %vr73
+	  storeAO %vr72 => %vr4, %vr78
+	  jumpI -> .L11
+	.L10:
+	  iret %vr20
+	.L11:
+	  loadI .float_const_0 => %vr79
+	  fload %vr79 => %vr80
+	  f2i %vr80 => %vr81
+	  cbr %vr81 -> .L5
+	.L4:
+	  ret
+	.frame quicksort, 12, %vr4, %vr5, %vr6
+	  load %vr5 => %vr7
+	  load %vr6 => %vr8
+	# comp %vr7, %vr8 => %vr9
+	# cmp_LT %vr7, %vr8 => %vr10
+	  cbr_GE %vr7, %vr8 -> .L12
+	  icall partition, %vr4, %vr5, %vr6 => %vr11
+	# loadI -4 => %vr12
+	  addI %vr0, -4 => %vr13
+	  storeAI %vr11 => %vr0, -4
+	  call quicksort, %vr4, %vr5, %vr13
+	# loadI 1 => %vr14
+	  addI %vr11, 1 => %vr15
+	# loadI -8 => %vr16
+	  addI %vr0, -8 => %vr17
+	  storeAI %vr15 => %vr0, -8
+	  call quicksort, %vr4, %vr17, %vr6
+	.L12:
+	  ret

@@ -5,9 +5,9 @@ struct storeAI_instruction
 {
 	struct instruction super;
 	
-	unsigned vr1;
+	unsigned val;
 	
-	unsigned vr2;
+	unsigned dst;
 	
 	int index;
 };

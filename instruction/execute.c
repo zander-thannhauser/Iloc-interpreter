@@ -5,11 +5,11 @@
 
 void execute_instruction(
 	struct instruction* this,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* registers,
-	struct vregister* params,
 	struct instruction** next)
 {
-	return (this->inheritance->execute)(this, stats, registers, params, next);
+	return (this->inheritance->execute)(this, ps, stack, stats, next);
 }
 

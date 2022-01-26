@@ -83,7 +83,7 @@
 int parse_instructions(
 	struct tokenizer* t,
 	struct scope* s,
-	size_t* out_nparameters,
+	size_t* out_nps,
 	struct instruction** next)
 {
 	int error = 0;
@@ -119,7 +119,7 @@ int parse_instructions(
 	while (!error && keep_going)
 	{
 		struct instruction* current = NULL;
-		struct instruction* label = NULL;
+		struct block* label = NULL;
 		struct vregister_ll* regs = NULL;
 		
 		unsigned line = t->token_line;
@@ -195,9 +195,9 @@ int parse_instructions(
 			// Branch Instructions:
 			case t_jumpI:  S A L N(jumpI, label); break;
 			case t_jump:   TODO; break;
-			case t_ret:    S          N(ret); break;
-			case t_cbr:    S R(1) A L N(cbr,   vr1, label); break;
-			case t_cbrne:  S R(1) A L N(cbrne, vr1, label); break;
+			case t_ret:    S                 N(ret); break;
+			case t_cbr:    S R(1)        A L N(cbr,   vr1, label); break;
+			case t_cbrne:  S R(1)        A L N(cbrne, vr1, label); break;
 			case t_cbr_LT: S R(1) C R(2) A L N(cbr_LT, vr1, vr2, label); break;
 			case t_cbr_LE: S R(1) C R(2) A L N(cbr_LE, vr1, vr2, label); break;
 			case t_cbr_GT: S R(1) C R(2) A L N(cbr_GT, vr1, vr2, label); break;
@@ -217,8 +217,8 @@ int parse_instructions(
 				
 				if (!error)
 				{
-					if (regs->n > *out_nparameters)
-						*out_nparameters = regs->n;
+					if (regs->n > *out_nps)
+						*out_nps = regs->n;
 					
 					error = new_call_instruction(&current, line, label, regs);
 				}
@@ -236,8 +236,8 @@ int parse_instructions(
 				
 				if (!error)
 				{
-					if (regs->n > *out_nparameters)
-						*out_nparameters = regs->n;
+					if (regs->n > *out_nps)
+						*out_nps = regs->n;
 					
 					error = 0 A R(3);
 				}
@@ -250,8 +250,8 @@ int parse_instructions(
 				if (!error)
 				{
 					// guarantee space for the return value:
-					if (1 > *out_nparameters)
-						*out_nparameters = 1;
+					if (1 > *out_nps)
+						*out_nps = 1;
 						
 					(*next)->next = tinc(master);
 					(*next) = master;

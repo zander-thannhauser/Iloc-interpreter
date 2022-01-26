@@ -4,6 +4,7 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <misc/get_vreg.h>
 #include <misc/print_vreg.h>
 
 #include "struct.h"
@@ -11,30 +12,45 @@
 
 void i2i_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
 	struct i2i_instruction* const this = (typeof(this)) super;
+
+	struct {
+		#ifdef ASM_VERBOSE
+		char name[10];
+		char value[20];
+		#endif
+		struct vregister* reg;
+	} src, dst;
+	
+	src.reg = get_vreg(stack, this->vr_src);
+	dst.reg = get_vreg(stack, this->vr_dst);
 	
 	#ifdef ASM_VERBOSE
-	char vr_src[10];
-	char vr_dst[10];
-	
-	snprintf(vr_src, 10, "%%vr%u", this->vr_src);
-	snprintf(vr_dst, 10, "%%vr%u", this->vr_dst);
+	snprintf(src.name, 10, "%%vr%u", this->vr_src);
+	snprintf(dst.name, 10, "%%vr%u", this->vr_dst);
 	
 	printf("line %4i: %8s %10s  %10s => %10s  %10s", super->line,
-		"i2i", vr_src, "", vr_dst, "");
+		"i2i", src.name, "", dst.name, "");
+	
+	printf(" // (%s = %s | ",
+		src.name, print_vreg(src.value, src.reg));
+	
+	fflush(stdout);
+	
 	#endif
 	
-	rs[this->vr_dst] = rs[this->vr_src];
+	*dst.reg = *src.reg;
 	
 	#ifdef ASM_VERBOSE
-	printf(" // (%s = %s, ", vr_src, print_vreg(&rs[this->vr_src]));
 	
-	printf("%s = %s)\n", vr_dst, print_vreg(&rs[this->vr_dst]));
+	printf("%s = %s)\n",
+		dst.name, print_vreg(dst.value, dst.reg));
+	
 	#endif
 	
 	stats->total++;

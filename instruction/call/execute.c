@@ -5,54 +5,71 @@
 
 #include <macros/LAMBDA.h>
 
-#include <structs/vregister.h>
+#include <structs/stack.h>
 #include <structs/stats.h>
 
 #include <misc/vregister_ll/foreach.h>
 
-#include <instruction/frame/struct.h>
+/*#include <instruction/frame/struct.h>*/
+
+#include <scope/block/struct.h>
+
+#include <misc/get_vreg.h>
+#include <misc/print_vreg.h>
 
 #include "struct.h"
 #include "execute.h"
 
 void call_instruction_execute(
 	struct instruction* super,
-	struct stats* stats,
-	struct vregister* rs,
 	struct vregister* ps,
+	struct stack* stack,
+	struct stats* stats,
 	struct instruction** next)
 {
-	size_t i = 0;
+	size_t i;
 	struct call_instruction* this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
+	size_t c = 0;
 	size_t n = 0;
 	{
-		printf("line %4i: %8s %10p", super->line, "call", this->callme);
+		printf("line %4i: ", super->line);
+		
+		c += printf("%8s %10s", "call", this->callme->name);
 		
 		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			char vr[10];
-			snprintf(vr, 10, "%%vr%u", u);
-			printf(", %10s", vr);
-		}));
-		
-		printf(" // (");
-		
-		vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-			printf("%%vr%u = %i, ", u, rs[u].as_int);
+			char name[10];
+			snprintf(name, 10, "%%vr%u", u);
+			c += printf(", %10s", name);
 			n++;
 		}));
 		
+		while (c < 8 + 1 + 10 + 2 + 10 + 4 + 10 + 2 + 10)
+			c++, putchar(' ');
+		
+		printf(" // (");
+		
+		i = 0, vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
+			char value[10];
+			
+			printf("%%vr%u = %s", u, print_vreg(value, get_vreg(stack, u)));
+			
+			if (++i < n)
+				printf(", ");
+		}));
+		
 		printf(")\n");
+		
 	}
 	#endif
 	
-	vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
-		ps[i++] = rs[u];
+	i = 0, vregister_ll_foreach(this->args, LAMBDA((unsigned u), {
+		ps[i++] = *get_vreg(stack, u);
 	}));
 	
-	/* push %rip:    */ *rs[1].as_pptr-- = super->next;
-	/* jump to call: */ *next            = this->callme;
+	/* push %rip:    */ *stack->rsp.as_pptr-- = super->next;
+	/* jump to call: */ *next = this->callme->instruction;
 	
 	stats->total++;
 }

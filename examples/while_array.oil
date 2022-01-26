@@ -1,0 +1,71 @@
+.data
+	   .string     .int_wformat, "%d\12"
+	   .string   .float_wformat, "%f\12"
+	   .string    .char_wformat, "%c\12"
+	   .string  .string_wformat, "%s\12"
+	   .string     .int_rformat, "%d"
+	   .string   .float_rformat, "%f"
+	   .string    .char_rformat, "%c"
+	   .string  .string_rformat, "%s"
+.text
+	.frame main, 44
+	# loadI 1 => %vr4
+	  loadI 1 => %vr5
+	# loadI 10 => %vr6
+	# loadI -1 => %vr7
+	# loadI 0 => %vr8
+	.L1:
+	  i2i %vr0 => %vr9
+	# loadI -4 => %vr10
+	# addI %vr0, -4 => %vr11
+	# loadI 1 => %vr12
+	# addI %vr5, -1 => %vr13
+	# loadI 4 => %vr14
+	# multI %vr5, 4 => %vr15
+	# addI %vr15, -4 => %vr16
+	# sub %vr0, %vr15 => %vr17
+	  multI %vr5, -4 => %vr18
+	  storeAO %vr5 => %vr0, %vr18
+	  addI %vr5, 1 => %vr19
+	  addI %vr5, 1 => %vr5
+	  loadI 10 => %vr20
+	# comp %vr19, %vr20 => %vr21
+	# cmp_LE %vr19, %vr20 => %vr22
+	  cbr_LE %vr19, %vr20 -> .L1
+	.L0:
+	# loadI 1 => %vr23
+	  loadI 1 => %vr5
+	# loadI 10 => %vr24
+	# loadI -1 => %vr25
+	# loadI 0 => %vr26
+	.L3:
+	  loadI 5 => %vr27
+	# comp %vr5, %vr27 => %vr28
+	# cmp_LT %vr5, %vr27 => %vr29
+	  cbr_GE %vr5, %vr27 -> .L4
+	  i2i %vr0 => %vr9
+	# loadI -4 => %vr30
+	# addI %vr0, -4 => %vr31
+	# loadI 1 => %vr32
+	# addI %vr5, -1 => %vr33
+	# loadI 4 => %vr34
+	# multI %vr5, 4 => %vr35
+	# addI %vr35, -4 => %vr36
+	# sub %vr0, %vr35 => %vr37
+	  multI %vr5, -4 => %vr39
+	  loadAO %vr0, %vr39 => %vr38
+	  iwrite %vr38
+	  jumpI -> .L5
+	.L4:
+	  loadI 0 => %vr40
+	  iwrite %vr40
+	.L5:
+	# loadI 1 => %vr41
+	  addI %vr5, 1 => %vr42
+	  addI %vr5, 1 => %vr5
+	  loadI 10 => %vr43
+	# comp %vr42, %vr43 => %vr44
+	# cmp_LE %vr42, %vr43 => %vr45
+	  cbr_LE %vr42, %vr43 -> .L3
+	.L2:
+	  ret

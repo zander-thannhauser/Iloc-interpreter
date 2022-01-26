@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -12,11 +13,13 @@
 
 void cbr_NE_instruction_execute(
 	struct instruction* super,
+	struct vregister* ps,
+	struct stack* stack,
 	struct stats* stats,
-	struct vregister* rs,
-	struct vregister* parameters,
 	struct instruction** next)
 {
+	TODO;
+	#if 0
 	struct cbr_NE_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
@@ -43,6 +46,7 @@ void cbr_NE_instruction_execute(
 		printf(" // (%s != %s = %s, ", vr1, vr2, conditional ? "true" : "false");
 		printf("%s = %p)\n", "%rip", *next);
 	}
+	#endif
 	#endif
 	
 	stats->total++;

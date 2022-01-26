@@ -8,7 +8,7 @@
 int new_storeAI_instruction(
 	struct instruction** new,
 	unsigned line,
-	unsigned vr1, unsigned vr2, int index)
+	unsigned val, unsigned dst, int index)
 {
 	int error = 0;
 	ENTER;
@@ -23,8 +23,8 @@ int new_storeAI_instruction(
 	
 	if (!error)
 	{
-		this->vr1 = vr1;
-		this->vr2 = vr2;
+		this->val = val;
+		this->dst = dst;
 		this->index = index;
 		
 		*new = (struct instruction*) this;

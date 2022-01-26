@@ -25,8 +25,11 @@ int new_loadI_instruction(
 	
 	if (!error)
 	{
-		this->intlit = intlit;
-		this->isint = isint;
+		#ifdef ASM_VERBOSE
+		this->literal.kind = isint ? vk_int : vk_ptr;
+		#endif
+		this->literal.as_int = intlit;
+		
 		this->vr = vr;
 		
 		*new = (struct instruction*) this;
@@ -35,6 +38,7 @@ int new_loadI_instruction(
 	EXIT;
 	return error;
 }
+
 
 
 

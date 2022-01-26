@@ -10,7 +10,7 @@
 int new_call_instruction(
 	struct instruction** new,
 	unsigned line,
-	struct instruction* callme,
+	struct block* callme,
 	struct vregister_ll* args)
 {
 	int error = 0;
@@ -26,8 +26,9 @@ int new_call_instruction(
 	
 	if (!error)
 	{
-		this->callme = tinc(callme);
 		this->args = tinc(args);
+		
+		this->callme = tinc(callme);
 		
 		*new = (struct instruction*) this;
 	}

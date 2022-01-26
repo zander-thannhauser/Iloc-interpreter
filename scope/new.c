@@ -16,8 +16,6 @@
 #include "block/free.h"
 #include "global/compare.h"
 #include "global/free.h"
-#include "unresolved/compare.h"
-#include "unresolved/free.h"
 
 #include "struct.h"
 #include "free.h"
@@ -35,7 +33,7 @@ int new_scope(struct scope** new)
 	if (false
 		|| !(blocks     = avl_alloc_tree(compare_blocks,     tfree))
 		|| !(globals    = avl_alloc_tree(compare_globals,    tfree))
-		|| !(unresolved = avl_alloc_tree(compare_unresolved, tfree)))
+		|| !(unresolved = avl_alloc_tree(compare_blocks, tfree)))
 	{
 		fprintf(stderr, "%s: avl_alloc_tree: %m\n", argv0);
 		error = e_out_of_memory;

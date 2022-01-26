@@ -6,6 +6,7 @@ struct cbr_GT_instruction
 	struct instruction super;
 	
 	unsigned vr1, vr2;
-	struct instruction* instruction;
+	
+	struct block* label;
 };
 

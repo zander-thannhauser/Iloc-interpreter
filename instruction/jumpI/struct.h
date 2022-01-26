@@ -5,6 +5,6 @@ struct jumpI_instruction
 {
 	struct instruction super;
 	
-	struct instruction* instruction;
+	struct block* label;
 };
 

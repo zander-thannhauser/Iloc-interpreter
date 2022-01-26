@@ -5,7 +5,11 @@
 
 #include <macros/streq.h>
 
+#include <enums/error.h>
+
 #include <memory/tstrdup.h>
+#include <memory/tmemdup.h>
+#include <memory/tcalloc.h>
 #include <memory/tfree.h>
 
 #include <scope/declare_global.h>
@@ -30,193 +34,65 @@ int parse_data(
 		while (!error && keep_going)
 		{
 			char* label = NULL;
+			void* value = NULL;
 			
 			if (t->token == t_string)
 			{
-				// use malloc not mmap
-				TODO;
-				#if 0
-				error = read_token(t);
-				
-				if (!error && t->token != t_label)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = tstrdup(&label, t->data.label.text);
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_comma)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_string_literal)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-				{
-					size_t n = t->data.string.len + 1;
-					
-					globals -= n;
-					
-					memcpy(globals, t->data.string.chars, n);
-					
-					dpvs(globals);
-					
-					assert(scope);
-					
-					error = scope_declare_global(scope, label, globals);
-				}
-				
-				if (!error)
-					error = read_token(t);
-				#endif
-				
+				error = 0
+					?: read_token(t)
+					?: (t->token != t_label ? e_syntax_error : 0)
+					?: tstrdup(&label, t->data.label.text)
+					?: read_token(t)
+					?: (t->token != t_comma ? e_syntax_error : 0)
+					?: read_token(t)
+					?: (t->token != t_string_literal ? e_syntax_error : 0)
+					?: tmemdup((void**) &value,
+						t->data.string.chars, t->data.string.len)
+					?: read_token(t)
+					 ;
 			}
 			else if (t->token == t_float)
 			{
-				// use malloc not mmap
-				TODO;
-				#if 0
-				error = read_token(t);
-				
-				if (!error && t->token != t_label)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = tstrdup(&label, t->data.label.text);
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_comma)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_float_literal)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-				{
-					dpv(t->data.floatlit.value);
-					
-					globals -= sizeof(float);
-					
-					memcpy(globals, &t->data.floatlit.value, sizeof(float));
-					
-					dpv(globals);
-					dpv(*((float*) globals));
-					
-					error = scope_declare_global(scope, label, globals);
-				}
-				
-				if (!error)
-					error = read_token(t);
-				#endif
-				
+				error = 0
+					?: read_token(t)
+					?: (t->token != t_label ? e_syntax_error : 0)
+					?: tstrdup(&label, t->data.label.text)
+					?: read_token(t)
+					?: (t->token != t_comma ? e_syntax_error : 0)
+					?: read_token(t)
+					?: (t->token != t_float_literal ? e_syntax_error : 0)
+					?: tmemdup((void**) &value, &t->data.floatlit.value, sizeof(float))
+					?: read_token(t)
+					 ;
 			}
 			else if (t->token == t_global)
 			{
-				// use malloc not mmap
-				TODO;
-				#if 0
-				size_t size, align;
-				
-				error = read_token(t);
-				
-				if (!error && t->token != t_label)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = tstrdup(&label, t->data.label.text);
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_comma)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_integer_literal)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-				{
-					size = t->data.intlit.value;
-					error = read_token(t);
-				}
-				
-				if (!error && t->token != t_comma)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-					error = read_token(t);
-				
-				if (!error && t->token != t_integer_literal)
-				{
-					TODO;
-					error = 1;
-				}
-				
-				if (!error)
-				{
-					align = t->data.intlit.value;
-					dpv(size);
-					dpv(align);
-					
-					globals -= size;
-					globals -= align - (intptr_t) globals % align;
-					error = scope_declare_global(scope, label, globals);
-				}
-				
-				if (!error)
-					error = read_token(t);
-				#endif
-				
+				error = 0
+					?: read_token(t)
+					?: (t->token != t_label ? e_syntax_error : 0)
+					?: tstrdup(&label, t->data.label.text)
+					?: read_token(t)
+					?: (t->token != t_comma ? e_syntax_error : 0)
+					?: read_token(t)
+					?: (t->token != t_integer_literal ? e_syntax_error : 0)
+					?: tcalloc((void**) &value, t->data.intlit.value, 1)
+					?: read_token(t)
+					?: (t->token != t_comma ? e_syntax_error : 0)
+					?: read_token(t)
+					?: (t->token != t_integer_literal ? e_syntax_error : 0)
+					?: read_token(t)
+					 ;
 			}
 			else
 			{
 				keep_going = false;
 			}
 			
+			if (!error && keep_going)
+				error = scope_declare_global(scope, label, value);
+			
 			tfree(label);
+			tfree(value);
 		}
 	}
 	

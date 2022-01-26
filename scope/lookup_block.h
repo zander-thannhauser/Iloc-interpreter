@@ -1,8 +1,8 @@
 
 struct scope;
-struct instruction;
+struct block;
 
 int scope_lookup_block(
 	struct scope* this,
 	char* label,
-	struct instruction** out);
+	struct block** out);

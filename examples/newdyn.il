@@ -9,7 +9,7 @@
 	.string	.char_rformat, "%c"
 	.string	.string_rformat, "%s"
 	.text
-	.frame	main, 3960
+	.frame	main, 3964
 	loadI	30  => %vr8
 	i2i	%vr8  => %vr5
 	loadI	30  => %vr8
