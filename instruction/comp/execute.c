@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <assert.h>
 
 #include <structs/vregister.h>
 #include <structs/stats.h>

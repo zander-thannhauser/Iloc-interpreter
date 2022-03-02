@@ -10,4 +10,4 @@ BEGIN
         END;
 	WRITE('SUCCESS')
 END
-            
+

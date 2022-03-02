@@ -1,6 +1,8 @@
 
 #ifdef ASM_VERBOSE
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include <macros/N.h>
@@ -13,7 +15,7 @@ char* print_vreg(char buffer[20], struct vregister* this)
 {
 	switch (this->kind)
 	{
-		case vk_unset: NOPE;
+		case vk_unset: abort();
 		case vk_bol: strcpy(buffer, this->as_int ? "true" : "false"); break;
 		case vk_cmp:
 			if (this->as_int < 0)
