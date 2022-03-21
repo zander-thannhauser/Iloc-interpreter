@@ -6,6 +6,9 @@
 #include <structs/vregister.h>
 #include <structs/stats.h>
 
+#include <scope/block/struct.h>
+
+#include <misc/get_vreg.h>
 #include <misc/print_vreg.h>
 
 #include "struct.h"
@@ -18,35 +21,46 @@ void cbr_NE_instruction_execute(
 	struct stats* stats,
 	struct instruction** next)
 {
-	TODO;
-	#if 0
 	struct cbr_NE_instruction* const this = (typeof(this)) super;
 	
+	struct {
+		#ifdef ASM_VERBOSE
+		char name[10];
+		char value[20];
+		#endif
+		struct vregister* reg;
+	} vr1, vr2;
+
+	vr1.reg = get_vreg(stack, this->vr1);
+	vr2.reg = get_vreg(stack, this->vr2);
+
 	#ifdef ASM_VERBOSE
-	char vr1[10];
-	char vr2[10];
 	{
-		snprintf(vr1, 10, "%%vr%u", this->vr1);
-		snprintf(vr2, 10, "%%vr%u", this->vr2);
+		snprintf(vr1.name, 10, "%%vr%u", this->vr1);
+		snprintf(vr2.name, 10, "%%vr%u", this->vr2);
 		
-		printf("line %4i: %8s %10s, %10s -> %10p  %10s", super->line,
-			"cbr_NE", vr1, vr2, this->instruction, "");
+		printf("line %4i: %8s %10s, %10s -> %10s  %10s", super->line,
+			"cbr_NE", vr1.name, vr2.name, this->label->name, "");
+		
+		printf(" // (%s = %s, %s = %s | ",
+			vr1.name, print_vreg(vr1.value, vr1.reg),
+			vr2.name, print_vreg(vr2.value, vr2.reg));
+		
+		fflush(stdout);
+		
+		assert(vr1.reg->kind == vk_int);
+		assert(vr2.reg->kind == vk_int);
 	}
 	#endif
 	
-	int vr1_value = rs[this->vr1].as_int;
-	int vr2_value = rs[this->vr2].as_int;
-	
-	bool conditional = vr1_value != vr2_value;
-	
-	*next = conditional ? this->instruction : super->next;
+	*next = vr1.reg->as_int != vr2.reg->as_int
+		? this->label->instruction
+		: super->next;
 	
 	#ifdef ASM_VERBOSE
 	{
-		printf(" // (%s != %s = %s, ", vr1, vr2, conditional ? "true" : "false");
-		printf("%s = %p)\n", "%rip", *next);
+		printf("%s = %u)\n", "line", (*next)->line);
 	}
-	#endif
 	#endif
 	
 	stats->total++;

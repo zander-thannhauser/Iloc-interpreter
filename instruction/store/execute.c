@@ -41,9 +41,9 @@ void store_instruction_execute(
 		
 		assert(dst.reg->kind == vk_ptr);
 		
-		printf(" // (%s = %s, %s = %p | ",
+		printf(" // (%s = %s, %s = %s | ",
 			val.name, print_vreg(val.value, val.reg),
-			dst.name, print_vreg(dst.value, val.reg));
+			dst.name, print_vreg(dst.value, dst.reg));
 		
 		fflush(stdout);
 	}

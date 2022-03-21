@@ -31,10 +31,7 @@ int new_cbr_NE_instruction(
 		this->vr1 = vr1;
 		this->vr2 = vr2;
 		
-		TODO;
-		#if 0
-		this->instruction = tinc(instruction);
-		#endif
+		this->label = tinc(label);
 		
 		*new = (struct instruction*) this;
 	}

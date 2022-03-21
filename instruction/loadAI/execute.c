@@ -40,8 +40,10 @@ void loadAI_instruction_execute(
 		printf("line %4i: %8s %10s, %10i => %10s  %10s", super->line,
 			"loadAI", vr1.name, this->intlit, vr3.name, "");
 		
-		printf(" // (%s = %p | ",
-			vr1.name, print_vreg(vr1.value, vr1.reg));
+		printf(" // (%s = %s | %p + %i = %p | ",
+			vr1.name, print_vreg(vr1.value, vr1.reg),
+			vr1.reg->as_ptr, this->intlit,
+			vr1.reg->as_ptr + this->intlit);
 		
 		fflush(stdout);
 		
@@ -57,9 +59,9 @@ void loadAI_instruction_execute(
 	{
 		vr3.reg->kind = vk_int;
 		
-		printf("*%s = %i, %s = %i)\n",
-			vr1.name, *vr1_value,
-			vr3.name, *vr1_value);
+		printf("*%p = %i, %s = %i)\n",
+			vr1_value, *vr1_value,
+			vr3.name,  vr3.reg->as_int);
 	}
 	#endif
 	

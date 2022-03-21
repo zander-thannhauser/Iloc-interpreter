@@ -93,7 +93,10 @@ int parse_frame(
 		tfree(label);
 	}
 	
-	((struct frame_instruction*) frame)->nregs = t->max_vreg + 1;
+	if (!error)
+	{
+		((struct frame_instruction*) frame)->nregs = t->max_vreg + 1;
+	}
 	
 	tfree(frame);
 	tfree(funcname);
