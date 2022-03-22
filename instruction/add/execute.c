@@ -21,6 +21,8 @@ void add_instruction_execute(
 {
 	struct add_instruction* const this = (typeof(this)) super;
 	
+	HERE;
+	
 	struct {
 		#ifdef ASM_VERBOSE
 		char name[10];
@@ -32,6 +34,8 @@ void add_instruction_execute(
 	vr1.reg = get_vreg(stack, this->vr1);
 	vr2.reg = get_vreg(stack, this->vr2);
 	vr3.reg = get_vreg(stack, this->vr3);
+	
+	HERE;
 	
 	#ifdef ASM_VERBOSE
 	{
@@ -49,6 +53,8 @@ void add_instruction_execute(
 		fflush(stdout);
 	}
 	#endif
+	
+	HERE;
 	
 	vr3.reg->as_int = vr1.reg->as_int + vr2.reg->as_int;
 	

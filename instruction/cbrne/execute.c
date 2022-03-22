@@ -42,7 +42,9 @@ void cbrne_instruction_execute(
 	}
 	#endif
 	
-	*next = !vr->as_int ? this->label->instruction : super->next;
+	*next = !vr->as_int
+		? this->label->instruction
+		: super->next;
 	
 	#ifdef ASM_VERBOSE
 	{
