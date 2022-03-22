@@ -23,6 +23,7 @@
 #include <instruction/multI/new.h>
 
 // Integer Memory Operations:
+#include <instruction/cmp_LT/new.h>
 #include <instruction/cmp_LE/new.h>
 #include <instruction/cmp_NE/new.h>
 #include <instruction/loadI/new.h>
@@ -156,7 +157,7 @@ int parse_instructions(
 			case t_storeAO: S R(1)        A R(2) C R(3) N(storeAO, vr1, vr2, vr3); break;
 			
 			// Compare Instructions
-			case t_cmp_LT: TODO; break;
+			case t_cmp_LT: S R(1) C R(2) A R(3) N(cmp_LT, vr1, vr2, vr3); break;
 			case t_cmp_LE: S R(1) C R(2) A R(3) N(cmp_LE, vr1, vr2, vr3); break;
 			case t_cmp_GT: TODO; break;
 			case t_cmp_GE: TODO; break;

@@ -20,6 +20,8 @@ void mod_instruction_execute(
 {
 	struct mod_instruction* const this = (typeof(this)) super;
 	
+	HERE;
+	
 	struct {
 		#ifdef ASM_VERBOSE
 		char name[10];
@@ -63,9 +65,13 @@ void mod_instruction_execute(
 	}
 	#endif
 	
+	HERE;
+	
 	stats->total++;
 	
 	*next = super->next;
+	
+	HERE;
 }
 
 
