@@ -120,6 +120,7 @@ struct tokenizer
 		t_call,
 		t_icall,
 		t_iret,
+		t_putchar,
 	} token;
 	
 	union {

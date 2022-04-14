@@ -225,6 +225,7 @@
 			unsigned int:   "%*s" "%s" " == " "(unsigned int) %u\n", \
 			signed long:    "%*s" "%s" " == " "(signed long) %li\n", \
 			unsigned long:  "%*s" "%s" " == " "(unsigned long) %lu\n", \
+			long long:      "%*s" "%s" " == " "(signed long long) %llu\n", \
 			float:          "%*s" "%s" " == " "(float) %f\n", \
 			double:         "%*s" "%s" " == " "(double) %lf\n", \
 			long double:    "%*s" "%s" " == " "(long double) %Lf\n", \

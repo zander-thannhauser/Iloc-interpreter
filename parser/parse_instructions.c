@@ -21,6 +21,8 @@
 #include <instruction/or/new.h>
 #include <instruction/addI/new.h>
 #include <instruction/multI/new.h>
+#include <instruction/lshift/new.h>
+#include <instruction/rshift/new.h>
 
 // Integer Memory Operations:
 #include <instruction/cmp_LT/new.h>
@@ -53,6 +55,7 @@
 // I/O Instructions:
 #include <instruction/iread/new.h>
 #include <instruction/iwrite/new.h>
+#include <instruction/fwrite/new.h>
 #include <instruction/swrite/new.h>
 
 // Branch Instructions
@@ -73,6 +76,7 @@
 #include <instruction/iret/new.h>
 #include <instruction/icall_master/new.h>
 #include <instruction/icall_slave/new.h>
+#include <instruction/putchar/new.h>
 
 #include <misc/vregister_ll/struct.h>
 #include <misc/vregister_ll/new.h>
@@ -135,8 +139,8 @@ int parse_instructions(
 			case t_add:     S R(1) C R(2) A R(3) N(add,   vr1,    vr2, vr3); break;
 			case t_sub:     S R(1) C R(2) A R(3) N(sub,   vr1,    vr2, vr3); break;
 			case t_mult:    S R(1) C R(2) A R(3) N(mult,  vr1,    vr2, vr3); break;
-			case t_lshift:  TODO; break;
-			case t_rshift:  TODO; break;
+			case t_lshift:  S R(1) C R(2) A R(3) N(lshift,vr1,    vr2, vr3); break;
+			case t_rshift:  S R(1) C R(2) A R(3) N(rshift,vr1,    vr2, vr3); break;
 			case t_mod:     S R(1) C R(2) A R(3) N(mod,   vr1,    vr2, vr3); break;
 			case t_and:     TODO; break;
 			case t_or:      S R(1) C R(2) A R(3) N(or,    vr1,    vr2, vr3); break;
@@ -190,7 +194,7 @@ int parse_instructions(
 			// I/O Instructions:
 			case t_fread:  TODO; break;
 			case t_iread:  S R(1) N(iread, vr1); break;
-			case t_fwrite: TODO; break;
+			case t_fwrite: S R(1) N(fwrite, vr1); break;
 			case t_iwrite: S R(1) N(iwrite, vr1); break;
 			case t_swrite: S R(1) N(swrite, vr1); break;
 			
@@ -264,6 +268,8 @@ int parse_instructions(
 			}
 			
 			case t_iret: S R(1) N(iret, vr1); break;
+			
+			case t_putchar: S R(1) N(putchar, vr1); break;
 			
 			default:
 				keep_going = false;

@@ -1,4 +1,5 @@
 
+#include <inttypes.h>
 #include <sys/param.h>
 #include <string.h>
 #include <stdlib.h>
@@ -307,6 +308,7 @@ int read_token(struct tokenizer* this)
 			else T(call);
 			else T(icall);
 			else T(iret);
+			else T(putchar);
 			else
 			{
 				append('\0');
@@ -355,10 +357,15 @@ int read_token(struct tokenizer* this)
 			append('\0');
 			
 			errno = 0;
-			signed long value = strtol(this->text.data, &m, 0);
+			intmax_t value = strtoimax(this->text.data, &m, 0);
 			
-			if (errno || *m || value > INT32_MAX || value < INT32_MIN)
+			dpv(value);
+			
+			if (errno || *m || value > UINT32_MAX || value < INT32_MIN)
 			{
+				dpvc(*m);
+				dpv(errno);
+				dpv(UINT32_MAX);
 				TODO;
 				error = 1;
 			}

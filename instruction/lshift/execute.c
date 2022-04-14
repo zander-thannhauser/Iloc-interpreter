@@ -1,6 +1,5 @@
 
 #include <sys/param.h>
-
 #include <stdio.h>
 
 #include <structs/vregister.h>
@@ -12,14 +11,14 @@
 #include "struct.h"
 #include "execute.h"
 
-void add_instruction_execute(
+void lshift_instruction_execute(
 	struct instruction* super,
 	struct vregister* ps,
 	struct stack* stack,
 	struct stats* stats,
 	struct instruction** next)
 {
-	struct add_instruction* const this = (typeof(this)) super;
+	struct lshift_instruction* const this = (typeof(this)) super;
 	
 	struct {
 		#ifdef ASM_VERBOSE
@@ -40,7 +39,7 @@ void add_instruction_execute(
 		snprintf(vr3.name, 10, "%%vr%u", this->vr3);
 		
 		printf("line %4i: %8s %10s, %10s => %10s  %10s", super->line,
-			"add", vr1.name, vr2.name, vr3.name, "");
+			"lshift", vr1.name, vr2.name, vr3.name, "");
 		
 		printf(" // (%s = %s, %s = %s | ",
 			vr1.name, print_vreg(vr1.value, vr1.reg),
@@ -50,21 +49,23 @@ void add_instruction_execute(
 	}
 	#endif
 	
-	vr3.reg->as_int = vr1.reg->as_int + vr2.reg->as_int;
+	vr3.reg->as_int = vr1.reg->as_int << vr2.reg->as_int;
 	
 	#ifdef ASM_VERBOSE
 	{
-		vr3.reg->kind = MAX(vr1.reg->kind, vr2.reg->kind);
+		vr3.reg->kind = vk_int;
 		
 		printf("%s = %s)\n", vr3.name, print_vreg(vr3.value, vr3.reg));
 	}
 	#endif
 	
-	stats->adds++;
 	stats->total++;
 	
 	*next = super->next;
 }
+
+
+
 
 
 

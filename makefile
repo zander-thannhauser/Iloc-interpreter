@@ -102,10 +102,11 @@ ARGS += -s
 #ARGS += -i ./examples/helloworld.oil
 #ARGS += -i ./examples/newdyn.il
 #ARGS += -i ./examples/newdyn.oil
+ARGS += -i ./examples/putchar.il
 #ARGS += -i ./examples/qs.il
 #ARGS += -i ./examples/qs.oil
 #ARGS += -i ./examples/while_array.il
-ARGS += -i ./examples/while_array.oil
+#ARGS += -i ./examples/while_array.oil
 
 run: $(buildprefix)/interpreter
 	$< $(ARGS)
