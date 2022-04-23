@@ -23,6 +23,7 @@
 #include <instruction/multI/new.h>
 #include <instruction/lshift/new.h>
 #include <instruction/rshift/new.h>
+#include <instruction/rshiftI/new.h>
 
 // Integer Memory Operations:
 #include <instruction/cmp_LT/new.h>
@@ -135,21 +136,21 @@ int parse_instructions(
 		switch (t->token)
 		{
 			// Integer Arthmetic Instructions:
-			case t_i2i:     S R(1)        A R(3) N(i2i,   vr1,         vr3); break;
-			case t_add:     S R(1) C R(2) A R(3) N(add,   vr1,    vr2, vr3); break;
-			case t_sub:     S R(1) C R(2) A R(3) N(sub,   vr1,    vr2, vr3); break;
-			case t_mult:    S R(1) C R(2) A R(3) N(mult,  vr1,    vr2, vr3); break;
-			case t_lshift:  S R(1) C R(2) A R(3) N(lshift,vr1,    vr2, vr3); break;
-			case t_rshift:  S R(1) C R(2) A R(3) N(rshift,vr1,    vr2, vr3); break;
-			case t_mod:     S R(1) C R(2) A R(3) N(mod,   vr1,    vr2, vr3); break;
+			case t_i2i:     S R(1)        A R(3) N(i2i,     vr1,         vr3); break;
+			case t_add:     S R(1) C R(2) A R(3) N(add,     vr1,    vr2, vr3); break;
+			case t_sub:     S R(1) C R(2) A R(3) N(sub,     vr1,    vr2, vr3); break;
+			case t_mult:    S R(1) C R(2) A R(3) N(mult,    vr1,    vr2, vr3); break;
+			case t_lshift:  S R(1) C R(2) A R(3) N(lshift,  vr1,    vr2, vr3); break;
+			case t_rshift:  S R(1) C R(2) A R(3) N(rshift,  vr1,    vr2, vr3); break;
+			case t_mod:     S R(1) C R(2) A R(3) N(mod,     vr1,    vr2, vr3); break;
 			case t_and:     TODO; break;
-			case t_or:      S R(1) C R(2) A R(3) N(or,    vr1,    vr2, vr3); break;
+			case t_or:      S R(1) C R(2) A R(3) N(or,      vr1,    vr2, vr3); break;
 			case t_not:     TODO; break;
-			case t_addI:    S R(1) C I    A R(3) N(addI,  vr1, intlit, vr3); break;
+			case t_addI:    S R(1) C I    A R(3) N(addI,    vr1, intlit, vr3); break;
 			case t_subI:    TODO; break;
-			case t_multI:   S R(1) C I    A R(3) N(multI, vr1, intlit, vr3); break;
+			case t_multI:   S R(1) C I    A R(3) N(multI,   vr1, intlit, vr3); break;
 			case t_lshiftI: TODO; break;
-			case t_rshiftI: TODO; break;
+			case t_rshiftI: S R(1) C I    A R(3) N(rshiftI, vr1, intlit, vr3); break;
 			
 			// Integer Memory Operations
 			case t_loadI:   S IorG        A R(1)        N(loadI,   intlit, isint, vr1); break;
