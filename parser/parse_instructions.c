@@ -26,9 +26,6 @@
 #include <instruction/rshiftI/new.h>
 
 // Integer Memory Operations:
-#include <instruction/cmp_LT/new.h>
-#include <instruction/cmp_LE/new.h>
-#include <instruction/cmp_NE/new.h>
 #include <instruction/loadI/new.h>
 #include <instruction/load/new.h>
 #include <instruction/loadAI/new.h>
@@ -39,6 +36,10 @@
 
 // Compare Instructions
 #include <instruction/comp/new.h>
+#include <instruction/cmp_GT/new.h>
+#include <instruction/cmp_LT/new.h>
+#include <instruction/cmp_LE/new.h>
+#include <instruction/cmp_NE/new.h>
 #include <instruction/testeq/new.h>
 #include <instruction/testgt/new.h>
 #include <instruction/testlt/new.h>
@@ -164,7 +165,7 @@ int parse_instructions(
 			// Compare Instructions
 			case t_cmp_LT: S R(1) C R(2) A R(3) N(cmp_LT, vr1, vr2, vr3); break;
 			case t_cmp_LE: S R(1) C R(2) A R(3) N(cmp_LE, vr1, vr2, vr3); break;
-			case t_cmp_GT: TODO; break;
+			case t_cmp_GT: S R(1) C R(2) A R(3) N(cmp_GT, vr1, vr2, vr3); break;
 			case t_cmp_GE: TODO; break;
 			case t_cmp_EQ: TODO; break;
 			case t_cmp_NE: S R(1) C R(2) A R(3) N(cmp_NE, vr1, vr2, vr3); break;

@@ -63,6 +63,7 @@ void cbr_EQ_instruction_execute(
 	}
 	#endif
 	
+	stats->comparisons++;
 	stats->total++;
 }
 

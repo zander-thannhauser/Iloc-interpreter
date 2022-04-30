@@ -361,7 +361,7 @@ int read_token(struct tokenizer* this)
 			
 			dpv(value);
 			
-			if (errno || *m || value > UINT32_MAX || value < INT32_MIN)
+			if (errno || *m)
 			{
 				dpvc(*m);
 				dpv(errno);
@@ -373,7 +373,7 @@ int read_token(struct tokenizer* this)
 			{
 				dpv(value);
 				
-				this->data.intlit.value = value;
+				this->data.intlit.value = value & 0xFFFFFFFF;
 				this->token = t_integer_literal;
 			}
 			break;

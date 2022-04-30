@@ -45,7 +45,7 @@ void storeAI_instruction_execute(
 		
 		fflush(stdout);
 		
-		assert(dst.reg->kind == vk_ptr);
+/*		assert(dst.reg->kind == vk_ptr);*/
 	}
 	#endif
 	

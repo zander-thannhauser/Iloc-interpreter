@@ -47,7 +47,7 @@ void loadAI_instruction_execute(
 		
 		fflush(stdout);
 		
-		assert(vr1.reg->kind == vk_ptr);
+/*		assert(vr1.reg->kind == vk_ptr);*/
 	}
 	#endif
 	

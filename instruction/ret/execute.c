@@ -15,6 +15,8 @@ void ret_instruction_execute(
 	struct stats* stats,
 	struct instruction** next)
 {
+	ENTER;
+	
 	struct ret_instruction* const this = (typeof(this)) super;
 	
 	#ifdef ASM_VERBOSE
@@ -54,6 +56,7 @@ void ret_instruction_execute(
 	
 	stats->total++;
 	
+	EXIT;
 }
 
 

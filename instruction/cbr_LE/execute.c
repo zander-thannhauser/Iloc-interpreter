@@ -63,6 +63,7 @@ void cbr_LE_instruction_execute(
 	}
 	#endif
 	
+	stats->comparisons++;
 	stats->total++;
 }
 
